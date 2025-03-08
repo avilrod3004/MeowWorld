@@ -1,0 +1,51 @@
+:root {
+    --primary-050: #F4E6DD;
+    --primary-100: #EACEBB;
+    --primary-200: #DFB599;
+    --primary-300: #D59D76;
+    --primary-400: #CA8454;
+    --primary-500: #B96D39;
+    --primary-600: #9A5B30;
+    --primary-700: #7B4926;
+    --primary-800: #5D361C;
+    --primary-900: #3E2413;
+
+    --secondary-050: #EDE4DE;
+    --secondary-100: #DBCABE;
+    --secondary-200: #C9AF9D;
+    --secondary-300: #B7957C;
+    --secondary-400: #A47A5B;
+    --secondary-500: #846249;
+    --secondary-600: #6E523D;
+    --secondary-700: #584131;
+    --secondary-800: #423125;
+    --secondary-900: #2C2118;
+
+    --neutral-000: #FFF;
+    --neutral-050: #F2F2F2;
+    --neutral-100: #EFE3E8;
+    --neutral-800: #515050;
+    --neutral-900: #312D2D;
+    --neutral-1000: #000;
+
+    --success-light-mode: #3F5F52;
+    --success-dark-mode: #A3C2B6;
+
+    --error-light-mode: #893829;
+    --error-dark-mode: #E5B0A9;
+
+
+    /* --- MODO CLARO --- */
+    --background-color: var(--neutral-000);
+    --text-color: var(--neutral-1000);
+
+    --button-primary-bg: var(--primary-400);
+    --button-primary-hover-bg: var(--primary-600);
+
+    --input-bg: var(--primary-050);
+}
+
+/* --- MODO OSCURO --- */
+[data-theme='dark'] {
+
+}
