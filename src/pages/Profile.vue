@@ -57,11 +57,11 @@ export default {
         async getUserData() {
             try {
                 // Datos del perfil del usuario
-                const responseProfile = await api.get('users/profile');
+                const responseProfile = await api.get('auth/me');
                 this.user = responseProfile.data.data;
 
                 // Gatos del usuario
-                const responseCats = await api.get(`v1/cats/user/${this.user.id}`);
+                const responseCats = await api.get(`cats/user/${this.user.id}`);
                 this.cats = responseCats.data.data;
 
                 // Seguidores del usuario
@@ -69,20 +69,12 @@ export default {
                 // Seguidor por el usuario
 
                 // Posts del usuario
-                const responsePosts = await api.get(`v1/posts/user/${this.user.id}`);
+                const responsePosts = await api.get(`posts/user/${this.user.id}`);
                 this.posts = responsePosts.data.data;
             } catch (error) {
                 console.error('Error al obtener el perfil del usuario:', error);
             }
         },
-
-        // async getUserCats() {
-        //     try {
-        //
-        //     } catch (error) {
-        //         console.error('Error al obtener los gatos:', error);
-        //     }
-        // }
     },
     computed: {
         userId() {
