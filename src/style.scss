@@ -5,3 +5,8 @@
 // Base
 @use "scss/base/reset";
 @use "scss/base/typo";
+
+// Components
+@use "scss/components/inputs";
+@use "scss/components/buttons";
+@use "scss/components/links";

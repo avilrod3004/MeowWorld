@@ -1,0 +1,10 @@
+.form__input {
+    background-color: var(--input-bg);
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.75rem 0.5rem;
+}
+
+.form__input:focus {
+    outline: var(--secondary-300) solid 0.2rem;
+}
