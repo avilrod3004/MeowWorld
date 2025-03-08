@@ -4,6 +4,7 @@ import Profile from "../pages/Profile.vue";
 import PrivateLayout from "../layouts/PrivateLayout.vue";
 import PublicLayout from "../layouts/PublicLayout.vue";
 import Register from "../pages/Register.vue";
+import NotFound from "../pages/NotFound.vue";
 
 const routes = [
     {
@@ -33,6 +34,10 @@ const routes = [
                 component: Profile,
             }
         ]
+    },
+    {
+        path: '/:pathMatch(.*)*',
+        component: NotFound,
     }
 
     // {
