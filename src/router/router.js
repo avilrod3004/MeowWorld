@@ -1,16 +1,34 @@
 import { createWebHistory, createRouter } from 'vue-router'
 import Login from "../pages/Login.vue";
 import Profile from "../pages/Profile.vue";
+import PrivateLayout from "../layouts/PrivateLayout.vue";
+import PublicLayout from "../layouts/PublicLayout.vue";
 
 const routes = [
     {
         path: "/",
-        component: Login
+        component: PublicLayout,
+        children: [
+            {
+                path: "",
+                name: "Login",
+                component: Login,
+            }
+        ]
     },
     {
-        path: "/profile",
-        component: Profile
+        path: '/profile',
+        component: PrivateLayout,
+        meta: { requiresAuth: true },
+        children: [
+            {
+                path: '',
+                name: 'Profile',
+                component: Profile,
+            }
+        ]
     }
+
     // {
     //     path: "/about",
     //     component: () => import('../modules/pokemon/pages/AboutPage.vue')
@@ -32,11 +50,21 @@ const routes = [
     //     path: "/:pathMatch(.*)*",
     //     component: () => import('../modules/pokemon/pages/NoPageFound.vue')
     // }
-]
+];
 
 const router = createRouter({
     history: createWebHistory(),
     routes
 })
+
+router.beforeEach((to, from, next) => {
+    const token = localStorage.getItem('token');
+
+    if (to.meta.requiresAuth && !token) {
+        next('/');
+    } else {
+        next();
+    }
+});
 
 export default router;
