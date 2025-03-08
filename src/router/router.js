@@ -3,6 +3,7 @@ import Login from "../pages/Login.vue";
 import Profile from "../pages/Profile.vue";
 import PrivateLayout from "../layouts/PrivateLayout.vue";
 import PublicLayout from "../layouts/PublicLayout.vue";
+import Register from "../pages/Register.vue";
 
 const routes = [
     {
@@ -13,6 +14,11 @@ const routes = [
                 path: "",
                 name: "Login",
                 component: Login,
+            },
+            {
+                path: "/register",
+                name: "Register",
+                component: Register,
             }
         ]
     },
