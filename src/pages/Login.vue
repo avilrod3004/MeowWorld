@@ -13,16 +13,23 @@
         <form @submit.prevent="handleLogin" class="content__form">
             <h1 class="form__title">Iniciar sesión</h1>
 
-<!--            <label for="email" class="form__label">Email</label>-->
             <input v-model="email" type="text" id="email" class="form__input" placeholder="Email" required />
-
-<!--            <label for="password" class="form__label">Contraseña</label>-->
             <input v-model="password" type="password" id="password" class="form__input" placeholder="Contraseña" required />
 
-            <button type="submit" class="form__button">Acceder</button>
+            <ul v-if="errors.length > 0">
+                <li
+                    v-for="error in errors"
+                    :key="error"
+                    class="form__error"
+                >
+                    x {{ error }}
+                </li>
+            </ul>
 
-            <p class="form__register">
-                ¿No tienes cuenta? <a href="/register">Regístrate aquí</a>
+            <button type="submit" class="button__primary">Acceder</button>
+
+            <p class="form__link">
+                ¿No tienes cuenta? <a href="/register" class="link">Regístrate aquí</a>
             </p>
         </form>
     </section>
@@ -37,6 +44,7 @@ export default {
         return {
             email: '',
             password: '',
+            errors: [],
         };
     },
 
@@ -55,8 +63,7 @@ export default {
                     this.$router.push('/profile');
                 }
             } catch (error) {
-                console.error('Error al iniciar sesión:', error);
-                alert('Credenciales incorrectas o error en el servidor');
+                this.errors = error.response.data.errors;
             }
         }
     }
@@ -129,35 +136,5 @@ main::before {
     font-weight: normal;
     font-style: normal;
     text-align: center;
-}
-
-.form__input {
-    background-color: var(--input-bg);
-    border: none;
-    border-radius: 0.5rem;
-    padding: 0.75rem 0.5rem;
-}
-
-.form__input:focus {
-    outline: var(--secondary-300) solid 0.2rem;
-}
-
-.form__button {
-    background-color: var(--button-primary-bg);
-    border: none;
-    border-radius: 0.5rem;
-
-    padding: 0.5rem 0.5rem;
-    margin-top: 3rem;
-
-    color: var(--neutral-000);
-    font-size: 1.2rem;
-    font-weight: bold;
-
-    cursor: pointer;
-}
-
-.form__button:hover {
-    background-color: var(--button-primary-hover-bg);
 }
 </style>
