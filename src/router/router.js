@@ -1,6 +1,6 @@
 import { createWebHistory, createRouter } from 'vue-router'
 import Login from "../pages/Login.vue";
-import Profile from "../pages/Profile.vue";
+import UserProfile from "../pages/UserProfile.vue";
 import PrivateLayout from "../layouts/PrivateLayout.vue";
 import PublicLayout from "../layouts/PublicLayout.vue";
 import Register from "../pages/Register.vue";
@@ -10,6 +10,7 @@ import Search from "../pages/Search.vue";
 import NewPost from "../pages/NewPost.vue";
 import Chats from "../pages/Chats.vue";
 import Notifications from "../pages/Notifications.vue";
+import CatProfile from "../pages/CatProfile.vue";
 
 const routes = [
     {
@@ -95,8 +96,26 @@ const routes = [
         children: [
             {
                 path: '',
-                name: 'Profile',
-                component: Profile,
+                name: 'UserProfile',
+                component: UserProfile,
+            }
+        ]
+    },
+    {
+        path: '/cat/:id',
+        component: PrivateLayout,
+        meta: { requiresAuth: true },
+        children: [
+            {
+                path: '',
+                name: 'CarId',
+                component: CatProfile,
+                props: (route) => {
+                    const { id } = route.params;
+                    return {
+                        id
+                    }
+                }
             }
         ]
     },
