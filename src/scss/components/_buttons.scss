@@ -6,7 +6,7 @@
     padding: 0.5rem 0.5rem;
     margin-top: 3rem;
 
-    color: var(--neutral-000);
+    color: var(--button-primary-text);
     font-size: 1.2rem;
     font-weight: bold;
 
@@ -15,4 +15,26 @@
 
 .button__primary:hover {
     background-color: var(--button-primary-hover-bg);
+}
+
+.button__primary:disabled {
+    opacity: 0.5;
+}
+
+.button__secondary {
+    background-color: var(--button-secundary-bg);
+    border: 0.2rem solid var(--button-secundary-border);
+    border-radius: 0.5rem;
+
+    padding: 0.5rem 0.5rem;
+
+    color: var(--button-secundary-text);
+    font-size: 1.2rem;
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.button__secondary:hover {
+    background-color: var(--button-secundary-hover-bg);
 }
