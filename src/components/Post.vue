@@ -10,7 +10,14 @@
 
     <img :src="this.post.image" alt="" class="post__image">
 
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab aliquid commodi cupiditate dolore enim eum, facilis, hic illo incidunt ipsam labore maxime provident quibusdam quis quisquam reiciendis sed tempore vitae.</p>
+    <p>{{ this.post.description }}</p>
+
+    <div v-if="allInfo">
+        <p>Gatos:</p>
+        <ul>
+            <li>Misufú</li>
+        </ul>
+    </div>
 
     <ul class="post__acciones">
         <li class="acciones__opcion">
@@ -32,7 +39,14 @@
             <font-awesome-icon :icon="['far', 'comment']" class="icono icono-header"/>
             <span>0</span>
         </li>
-        <li class="acciones__opcion link">Ver post</li>
+        <li
+            v-if="!allInfo"
+            class="acciones__opcion link"
+        >
+            <router-link :to="{ name: 'InfoPost', params: { id: this.post.id } }">
+                Ver post
+            </router-link>
+        </li>
     </ul>
 </article>
 </template>
@@ -43,13 +57,13 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faHeart as fasHeart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart, faComment } from "@fortawesome/free-regular-svg-icons"
-import PostPreviewHeader from "./PostPreviewHeader.vue";
+import PostHeader from "./PostHeader.vue";
 
 library.add(faHeart, fasHeart, faComment);
 
 export default {
     name: "PostPreview",
-    components: {PostPreviewHeader, FontAwesomeIcon },
+    components: {PostPreviewHeader: PostHeader, FontAwesomeIcon },
 
     data() {
         return {
@@ -61,6 +75,10 @@ export default {
         post: {
             type: Object,
             required: true
+        },
+        allInfo: {
+            type: Boolean,
+            required: true,
         }
     },
 

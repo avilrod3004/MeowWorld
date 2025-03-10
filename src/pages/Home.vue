@@ -1,6 +1,6 @@
 <template>
     <div v-if="posts && posts.length > 0">
-        <PostPreview v-for="post in posts" :key="post.id" :post="post"/>
+        <PostPreview v-for="post in posts" :key="post.id" :post="post" :all-info="false"/>
     </div>
 
     <p v-if="!posts">Cargando....</p>
@@ -8,12 +8,12 @@
 </template>
 
 <script>
-import PostPreview from "../components/PostPreview.vue";
+import Post from "../components/Post.vue";
 import api from "../helpers/api.js";
 
 export default {
     name: "Home",
-    components: {PostPreview},
+    components: {PostPreview: Post},
 
     data() {
         return {

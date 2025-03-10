@@ -11,6 +11,7 @@ import NewPost from "../pages/NewPost.vue";
 import Chats from "../pages/Chats.vue";
 import Notifications from "../pages/Notifications.vue";
 import CatProfile from "../pages/CatProfile.vue";
+import InfoPost from "../pages/InfoPost.vue";
 
 const routes = [
     {
@@ -116,6 +117,18 @@ const routes = [
                         id
                     }
                 }
+            }
+        ]
+    },
+    {
+        path: '/post/:id',
+        component: PrivateLayout,
+        meta: { requiresAuth: true },
+        children: [
+            {
+                path: '',
+                name: 'InfoPost',
+                component: () => import('../pages/InfoPost.vue'),
             }
         ]
     },
