@@ -250,7 +250,7 @@ main::before {
     font-size: 6rem;
     text-align: center;
 
-    color: var(--primary-500);
+    color: var(--header-color);
     background-color: var(--background-color);
     width: fit-content;
     border-radius: 2rem;
