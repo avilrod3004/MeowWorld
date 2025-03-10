@@ -5,6 +5,11 @@ import PrivateLayout from "../layouts/PrivateLayout.vue";
 import PublicLayout from "../layouts/PublicLayout.vue";
 import Register from "../pages/Register.vue";
 import NotFound from "../pages/NotFound.vue";
+import Home from "../pages/Home.vue";
+import Search from "../pages/Search.vue";
+import NewPost from "../pages/NewPost.vue";
+import Chats from "../pages/Chats.vue";
+import Notifications from "../pages/Notifications.vue";
 
 const routes = [
     {
@@ -20,6 +25,66 @@ const routes = [
                 path: "/register",
                 name: "Register",
                 component: Register,
+            }
+        ]
+    },
+    {
+        path: '/home',
+        component: PrivateLayout,
+        meta: { requiresAuth: true },
+        children: [
+            {
+                path: '',
+                name: 'Home',
+                component: Home,
+            }
+        ]
+    },
+    {
+        path: '/search',
+        component: PrivateLayout,
+        meta: { requiresAuth: true },
+        children: [
+            {
+                path: '',
+                name: 'Search',
+                component: Search,
+            }
+        ]
+    },
+    {
+        path: '/newpost',
+        component: PrivateLayout,
+        meta: { requiresAuth: true },
+        children: [
+            {
+                path: '',
+                name: 'NewPost',
+                component: NewPost,
+            }
+        ]
+    },
+    {
+        path: '/chats',
+        component: PrivateLayout,
+        meta: { requiresAuth: true },
+        children: [
+            {
+                path: '',
+                name: 'Chats',
+                component: Chats,
+            }
+        ]
+    },
+    {
+        path: '/notifications',
+        component: PrivateLayout,
+        meta: { requiresAuth: true },
+        children: [
+            {
+                path: '',
+                name: 'Notifications',
+                component: Notifications,
             }
         ]
     },
