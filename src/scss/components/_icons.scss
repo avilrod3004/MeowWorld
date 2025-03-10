@@ -1,0 +1,11 @@
+.icono {
+    font-size: 1.5rem;
+    color: var(--icon-color);
+    transition: color 0.3s ease;
+
+    cursor: pointer;
+}
+
+.router-link-active .icono {
+    color: var(--icon-color-active);
+}
