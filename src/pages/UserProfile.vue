@@ -1,13 +1,13 @@
 <template>
 <section v-if="user" class="perfil">
-    <div class="perfil__datos">
-        <img :src="userImProfile" alt="" class="datos__imagen">
-        <div class="datos__listado">
-            <p class="listado__nombre">{{ userName }}</p>
-            <p class="listado__username">@{{ userUsername}}</p>
-        </div>
-        <p class="datos__descripcion">{{ userDescription }}</p>
-    </div>
+    <ProfileData
+        :id="userId"
+        type="user"
+        :description="userDescription"
+        :username="userUsername"
+        :name="userName"
+        :img-profile="userImProfile"
+    />
 
     <ul class="perfil__estadistica">
         <li class="estadistica__dato">seguidores</li>
@@ -23,7 +23,7 @@
             :key="cat.id"
             class="gatos__gato"
         >
-            <img :src="cat.image" alt="" class="gato__imagen">
+            <img :src="cat.image" alt="" class="gato__imagen" @click="gotToCatProfile(cat.id)">
         </li>
     </ul>
 
@@ -31,27 +31,18 @@
 </section>
 <p v-else>Cargando perfil...</p>
 
-<section v-if="posts" class="perfil__posts">
-    <p v-if="posts.length === 0">No has publicado fotos todavía :(</p>
-
-    <ul class="posts__listado">
-        <li
-            v-for="post in posts"
-            :key="post.id"
-            class="listado__post"
-        >
-            <img :src="post.image" alt="" class="post__image">
-        </li>
-    </ul>
-</section>
-<p v-else>Cargando posts...</p>
+<ListProfilePosts no-post-message="No has publicado fotos todavía :(" :posts="posts"/>
 </template>
 
 <script>
 import api from '../helpers/api.js';
+import ProfileData from "../components/ProfileData.vue";
+import ListProfilePosts from "../components/ListProfilePosts.vue";
 
 export default {
     name: 'Profile',
+    components: {ListProfilePosts, ProfileData},
+
     data() {
         return {
             user: null,
@@ -59,6 +50,7 @@ export default {
             posts: null,
         };
     },
+
     methods: {
         async getUserData() {
             try {
@@ -81,7 +73,12 @@ export default {
                 console.error('Error al obtener el perfil del usuario:', error);
             }
         },
+
+        gotToCatProfile(catId) {
+            this.$router.push(`/cat/${catId}`);
+        }
     },
+
     computed: {
         userId() {
             return this.user ? this.user.id : '';
@@ -103,6 +100,7 @@ export default {
             return this.user ? this.user.img_profile : '';
         }
     },
+
     created() {
         this.getUserData();
     }
@@ -114,36 +112,6 @@ export default {
     display: flex;
     flex-direction: column;
     gap: 1rem;
-}
-
-.perfil__datos {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-}
-
-.datos__imagen {
-    width: 4.5rem;
-    height: 4.5rem;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-.datos__listado {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.listado__nombre {
-    font-family: "DynaPuff", system-ui;
-    font-weight: normal;
-    font-style: normal;
-    font-size: 2rem;
-}
-
-.datos__descripcion {
-    width: 100%;
 }
 
 .perfil__estadistica {
@@ -166,22 +134,5 @@ export default {
 
 .editar-perfil {
     width: 100%;
-}
-
-.perfil__posts {
-    margin-top: 1rem;
-}
-
-.posts__listado {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
-    gap: 1rem;
-    max-width: 100%;
-}
-
-.post__image {
-    width: 100%;
-    aspect-ratio: 1 / 1; /* Hace que la imagen siempre sea cuadrada */
-    object-fit: cover; /* Ajusta la imagen para que se recorte y se vea bien */
 }
 </style>
