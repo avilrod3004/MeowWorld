@@ -119,6 +119,24 @@ const routes = [
             }
         ]
     },
+    // {
+    //     path: '/user/profile/:id',
+    //     component: PrivateLayout,
+    //     meta: { requiresAuth: true },
+    //     children: [
+    //         {
+    //             path: '',
+    //             name: 'UserId',
+    //             component: UserProfile,
+    //             props: (route) => {
+    //                 const { id } = route.params;
+    //                 return {
+    //                     id,
+    //                 }
+    //             }
+    //         }
+    //     ]
+    // },
     {
         path: '/:pathMatch(.*)*',
         component: NotFound,
