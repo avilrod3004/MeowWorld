@@ -3,7 +3,7 @@
     <div class="perfil__datos">
         <img :src="userImProfile" alt="" class="datos__imagen">
         <div class="datos__listado">
-            <h1 class="listado__nombre">{{ userName }}</h1>
+            <p class="listado__nombre">{{ userName }}</p>
             <p class="listado__username">@{{ userUsername}}</p>
         </div>
         <p class="datos__descripcion">{{ userDescription }}</p>
@@ -135,6 +135,13 @@ export default {
     justify-content: space-between;
 }
 
+.listado__nombre {
+    font-family: "DynaPuff", system-ui;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 2rem;
+}
+
 .datos__descripcion {
     width: 100%;
 }
@@ -166,16 +173,15 @@ export default {
 }
 
 .posts__listado {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
     gap: 1rem;
-
-    border: 1px solid black;
+    max-width: 100%;
 }
 
 .post__image {
-    width: 10rem;
-    border: 1px solid black;
+    width: 100%;
+    aspect-ratio: 1 / 1; /* Hace que la imagen siempre sea cuadrada */
+    object-fit: cover; /* Ajusta la imagen para que se recorte y se vea bien */
 }
 </style>
