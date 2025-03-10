@@ -151,7 +151,7 @@ export default {
 
                 if (response.data.access_token) {
                     localStorage.setItem('token', response.data.access_token);
-                    this.$router.push('/profile');
+                    this.$router.push('/home');
                 }
             } catch (error) {
                 // this.errors = {
