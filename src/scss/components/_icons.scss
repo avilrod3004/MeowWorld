@@ -6,11 +6,19 @@
     cursor: pointer;
 }
 
+.router-link-active .icono {
+    color: var(--icon-color-active);
+}
+
 .icono-adopt {
     font-size: 1.25rem;
     color: var(--adopt-icon-color);
 }
 
-.router-link-active .icono {
-    color: var(--icon-color-active);
+.icono-unliked {
+    color: var(--icon-unliked-color);
+}
+
+.icono-liked {
+    color: var(--icon-liked-color);
 }
