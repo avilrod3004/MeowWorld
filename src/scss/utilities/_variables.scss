@@ -38,10 +38,18 @@
     /* --- MODO CLARO --- */
     --background-color: var(--neutral-000);
     --text-color: var(--neutral-1000);
+    --icon-color: var(--neutral-1000);
+    --icon-color-active: var(--secondary-600);
     --link-color: var(--secondary-600);
 
     --button-primary-bg: var(--primary-400);
+    --button-primary-text: var(--neutral-000);
     --button-primary-hover-bg: var(--primary-600);
+
+    --button-secundary-bg: var(--neutral-000);
+    --button-secundary-border: var(--secondary-500);
+    --button-secundary-text: var(--secondary-500);
+    --button-secundary-hover-bg: var(--neutral-050);
 
     --input-bg: var(--primary-050);
     --form-error: var(--error-light-mode);
