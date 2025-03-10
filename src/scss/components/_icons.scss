@@ -6,6 +6,11 @@
     cursor: pointer;
 }
 
+.icono-adopt {
+    font-size: 1.25rem;
+    color: var(--adopt-icon-color);
+}
+
 .router-link-active .icono {
     color: var(--icon-color-active);
 }
