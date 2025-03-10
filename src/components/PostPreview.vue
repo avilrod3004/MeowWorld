@@ -1,16 +1,12 @@
 <template>
 <article class="post">
-    <div class="post__user">
-        <img :src="this.post.author.img_profile" alt="devolver imagen desde la api!!" class="user__image">
-
-        <div class="user__data">
-            <div class="data__names">
-                <p class="names__name">{{ this.post.author.name }}</p>
-                <p class="names__username">@{{ this.post.author.username }}</p>
-            </div>
-            <p class="data__date">{{ formatData(this.post.created_at) }}</p>
-        </div>
-    </div>
+    <PostPreviewHeader
+        :id="this.post.author.id"
+        :created_at="this.post.created_at"
+        :username="this.post.author.username"
+        :name="this.post.author.name"
+        :img_profile="this.post.author.img_profile"
+    />
 
     <img :src="this.post.image" alt="" class="post__image">
 
@@ -47,12 +43,13 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faHeart as fasHeart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart, faComment } from "@fortawesome/free-regular-svg-icons"
+import PostPreviewHeader from "./PostPreviewHeader.vue";
 
 library.add(faHeart, fasHeart, faComment);
 
 export default {
     name: "PostPreview",
-    components: { FontAwesomeIcon },
+    components: {PostPreviewHeader, FontAwesomeIcon },
 
     data() {
         return {
@@ -93,35 +90,6 @@ export default {
 
     border-bottom: 0.1rem solid #ccc;
     padding: 1rem 0
-}
-
-.post__user {
-    display: flex;
-    gap: 0.5rem;
-}
-
-.user__image {
-    width: 3rem;
-    height: 3rem;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-.user__data {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.data__names {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.names__name {
-    font-family: "DynaPuff", system-ui;
-    font-size: 1.25rem;
 }
 
 .post__image {
