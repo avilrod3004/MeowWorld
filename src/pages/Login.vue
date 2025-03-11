@@ -10,90 +10,25 @@
             <h1 class="content__title">World</h1>
         </div>
 
-        <form @submit.prevent="handleLogin" class="content__form">
+        <Form @submit="handleLogin"  :validation-schema="schema" class="content__form">
             <h1 class="form__title">Iniciar sesión</h1>
 
-            <input
-                v-model="email"
-                @blur="validateEmail"
-                type="text" id="email"
-                class="form__input"
-                placeholder="Email"
-                required
-            />
-            <ul v-if="errors.email.length > 0">
-                <li
-                    v-for="error in errors.email"
-                    :key="error"
-                    class="form__error"
-                >
-                    x {{ error }}
-                </li>
-            </ul>
-<!--            <input-->
-<!--                v-model="email"-->
-<!--                @blur="v$.email.$touch"-->
-<!--                type="text"-->
-<!--                id="email"-->
-<!--                class="form__input"-->
-<!--                placeholder="Email"-->
-<!--            />-->
-<!--            <ul v-if="v$.email.$errors.length > 0">-->
-<!--                <li v-for="error in v$.email.$errors" :key="error.$uid" class="form__error">-->
-<!--                    x {{ error.$message }}-->
-<!--                </li>-->
-<!--            </ul>-->
+            <Field name="email" class="form__input"/>
+            <ErrorMessage name="email" class="form__error"/>
 
-            <input
-                v-model="password"
-                @blur="validatePassword"
-                type="password"
-                id="password"
-                class="form__input"
-                placeholder="Contraseña"
-            />
-            <ul v-if="errors.password.length > 0">
-                <li
-                    v-for="error in errors.password"
-                    :key="error"
-                    class="form__error"
-                >
-                    x {{ error }}
-                </li>
-            </ul>
-<!--            <input-->
-<!--                v-model="password"-->
-<!--                @blur="v$.password.$touch"-->
-<!--                type="password"-->
-<!--                id="password"-->
-<!--                class="form__input"-->
-<!--                placeholder="Contraseña"-->
-<!--            />-->
-<!--            <ul v-if="v$.password.$errors.length > 0">-->
-<!--                <li v-for="error in v$.password.$errors" :key="error.$uid" class="form__error">-->
-<!--                    x {{ error.$message }}-->
-<!--                </li>-->
-<!--            </ul>-->
+            <Field name="password" type="password" class="form__input"/>
+            <ErrorMessage name="password" class="form__error"/>
 
-            <button type="submit" class="button__primary" :disabled="haveErrors">Acceder</button>
-<!--            <button type="submit" class="button__primary" :disabled="v$.$invalid">-->
-<!--                Acceder-->
-<!--            </button>-->
+            <button type="submit" class="button__primary">Acceder</button>
 
-            <ul v-if="errors.fromServer.length > 0">
-                <li
-                    v-for="error in errors.fromServer"
-                    :key="error"
-                    class="form__error"
-                >
-                    x {{ error }}
-                </li>
+            <ul>
+                <li v-for="error in errors" class="form__error">{{ error }}</li>
             </ul>
 
             <p class="form__link">
                 ¿No tienes cuenta? <a href="/register" class="link">Regístrate aquí</a>
             </p>
-        </form>
+        </Form>
     </section>
 </main>
 </template>
@@ -101,111 +36,57 @@
 <script>
 import axios from 'axios';
 import * as yup from 'yup';
+import {Form, Field, ErrorMessage} from "vee-validate";
 
 export default {
-    data() {
-        return {
-            email: '',
-            password: '',
-            errors: {
-                email: [],
-                password: [],
-                fromServer: []
-            },
-        };
-
-        // return {
-        //     email: '',
-        //     password: '',
-        //     errors: {
-        //         fromServer: [],
-        //     },
-        // };
+    components: {
+        Form,
+        Field,
+        ErrorMessage,
     },
 
-    validations() {
+    data() {
         return {
-            email: yup
-                .string()
-                .required('El email es obligatorio')
-                .email('El formato del email no es válido'),
-
-            password: yup
-                .string()
-                .required('La contraseña es obligatoria')
-                .min(6, 'La contraseña debe tener al menos 6 caracteres'),
+            errors: [],
+            schema: yup.object().shape({
+                email: yup
+                    .string()
+                    .required('Ingrese el email')
+                    .email('El formato del email no es válido')
+                    .matches(/^((?!\.)[\w\-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/gm, 'El formato del email no es válido'),
+                password: yup
+                    .string()
+                    .required("Ingrese la contraseña")
+            })
         };
     },
 
     methods: {
-        async handleLogin() {
-            // if (this.haveErrors()) return;
-            // const isValid = await this.v$.$validate();
-            // if (!isValid) return;
-
+        async handleLogin(values) {
             try {
-                const response = await axios.post( import.meta.env.VITE_BASE_API + "auth/login", {
-                    email: this.email,
-                    password: this.password
-                });
+                const response = await axios.post( import.meta.env.VITE_BASE_API + "auth/login", values);
 
                 if (response.data.access_token) {
                     localStorage.setItem('token', response.data.access_token);
                     this.$router.push('/home');
                 }
             } catch (error) {
-                // this.errors = {
-                //     email: [],
-                //     password: [],
-                //     others: []
-                // }
+                this.errors = [];
 
-                this.errors.fromServer = error.response.data.errors || ['Error en la autenticación'];
+                if (error.response.status === 422) {
+                    if ('email' in error.response.data.errors) {
+                        this.errors = [...this.errors, ...error.response.data.errors.email];
+                    }
 
-                // if (error.response.status === 422) {
-                //     if ('email' in error.response.data.errors) {
-                //         this.errors.email = error.response.data.errors.email;
-                //     }
-                //
-                //     if ('password' in error.response.data.errors) {
-                //         this.errors.password = error.response.data.errors.password;
-                //     }
-                // } else {
-                //     this.errors.fromServer = error.response.data.errors;
-                // }
-            }
-        },
-
-        validateEmail() {
-            this.errors.email = [];
-            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-            if (!this.email) {
-                this.errors.email.push('El email es obligatorio.');
-            } else if (!emailPattern.test(this.email)) {
-                this.errors.email.push('El formato del email no es válido.');
-            }
-        },
-
-        validatePassword() {
-            this.errors.password = [];
-
-            if (!this.password) {
-                this.errors.password.push("La contraseña es obligatoria.");
+                    if ('password' in error.response.data.errors) {
+                        this.errors = [...this.errors, ...error.response.data.errors.password];
+                    }
+                } else {
+                    this.errors = [...this.errors, ...error.response.data.errors];
+                }
             }
         },
     },
-
-    computed: {
-        haveErrors() {
-            return this.errors.email.length > 0 || this.errors.password.length > 0;
-        }
-    },
-
-    // watch: {
-    //     email: 'validateEmail',
-    //     password: 'validatePassword',
-    // }
 };
 </script>
 
