@@ -45,7 +45,7 @@ export default {
 
     created() {
         this.postId = this.$route.params.id;
-        // Aquí podrías hacer una llamada a la API para obtener el post
+
         this.getPostData();
     }
 }
