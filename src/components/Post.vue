@@ -35,10 +35,12 @@
             />
             <span>0</span>
         </li>
+
         <li class="acciones__opcion">
             <font-awesome-icon :icon="['far', 'comment']" class="icono icono-header"/>
             <span>0</span>
         </li>
+
         <li
             v-if="!allInfo"
             class="acciones__opcion link"
@@ -47,6 +49,30 @@
                 Ver post
             </router-link>
         </li>
+
+        <li v-if="allInfo" @click="openModalEditPost">Editar</li>
+        <Modal :is-open="showModalEditPost" v-slot="{ values }">
+            <Form>
+                <label for="description">Cambiar la descripción del post:</label>
+                <Field
+                    name="description"
+                    class="form__input"
+                    as="textarea"
+                    v-model="currentDescription"
+                />
+                <ErrorMessage name="email" class="form__error"/>
+            </Form>
+
+            <button @click="showModalEditPost = false">Cancelar</button>
+            <button @click="editPost">Actualizar post</button>
+        </Modal>
+
+        <li v-if="allInfo" @click="showModalDeletePost = true">Borrar</li>
+        <Modal :is-open="showModalDeletePost">
+            <p>¿Quiere eliminar este post?</p>
+            <button @click="showModalDeletePost = false">Cancelar</button>
+            <button @click="deletePost">Borrar post</button>
+        </Modal>
     </ul>
 </article>
 </template>
@@ -58,16 +84,30 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { faHeart as fasHeart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart, faComment } from "@fortawesome/free-regular-svg-icons"
 import PostHeader from "./PostHeader.vue";
+import api from "../helpers/api.js";
+import Modal from "../modals/Modal.vue";
+import * as yup from 'yup';
+import {Form, Field, ErrorMessage} from "vee-validate";
 
 library.add(faHeart, fasHeart, faComment);
 
 export default {
     name: "PostPreview",
-    components: {PostPreviewHeader: PostHeader, FontAwesomeIcon },
+    components: {
+        PostPreviewHeader: PostHeader,
+        FontAwesomeIcon,
+        Modal,
+        Form,
+        Field,
+        ErrorMessage
+    },
 
     data() {
         return {
             liked: null,
+            showModalEditPost: false,
+            currentDescription: "",
+            showModalDeletePost: false,
         }
     },
 
@@ -95,6 +135,27 @@ export default {
                 console.log("Like eliminado");
                 // Aquí harías la petición para quitar el like
             }
+        },
+
+        async deletePost() {
+            try {
+                const reponseDeletePost = await api.delete(`/posts/${this.post.id}`);
+
+                if (reponseDeletePost.status === 200) {
+                    this.$router.push('/profile')
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        openModalEditPost() {
+            this.currentDescription = this.post.description;
+            this.showModalEditPost = true
+        },
+
+        editPost() {
+            console.log("Editado");
         }
     },
 }
