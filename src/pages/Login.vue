@@ -13,10 +13,10 @@
         <Form @submit="handleLogin"  :validation-schema="schema" class="content__form">
             <h1 class="form__title">Iniciar sesión</h1>
 
-            <Field name="email" class="form__input"/>
+            <Field name="email" class="form__input" placeholder="Email"/>
             <ErrorMessage name="email" class="form__error"/>
 
-            <Field name="password" type="password" class="form__input"/>
+            <Field name="password" type="password" class="form__input" placeholder="Contraseña"/>
             <ErrorMessage name="password" class="form__error"/>
 
             <button type="submit" class="button__primary">Acceder</button>
@@ -51,11 +51,13 @@ export default {
             schema: yup.object().shape({
                 email: yup
                     .string()
+                    .trim()
                     .required('Ingrese el email')
                     .email('El formato del email no es válido')
                     .matches(/^((?!\.)[\w\-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/gm, 'El formato del email no es válido'),
                 password: yup
                     .string()
+                    .trim()
                     .required("Ingrese la contraseña")
             })
         };
@@ -136,18 +138,6 @@ main::before {
     width: fit-content;
     border-radius: 2rem;
     padding: 0.5rem 1rem;
-}
-
-.content__form {
-    background-color: var(--background-color);
-    border-radius: 1rem;
-    box-shadow: 0 0.25rem 0.5rem 0 rgba(0, 0, 0, 0.25);
-
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-
-    padding: 2rem;
 }
 
 .form__title {

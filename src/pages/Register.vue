@@ -10,56 +10,118 @@
                 <h1 class="content__title">World</h1>
             </div>
 
-            <form @submit.prevent="handleRegister" class="content__form">
+            <Form @submit="handleRegister" :validation-schema="schema" class="content__form">
                 <h1 class="form__title">Crear cuenta</h1>
 
-                <input v-model="name" type="text" id="name" class="form__input" placeholder="Nombre" />
-                <input v-model="username" type="text" id="username" class="form__input" placeholder="Nombre de usuario" required />
-                <input v-model="email" type="text" id="email" class="form__input" placeholder="Email" required />
-                <input v-model="password" type="password" id="password" class="form__input" placeholder="Contraseña" required />
+                <Field name="name" class="form__input" placeholder="Nombre"/>
+                <ErrorMessage name="name" class="form__error"/>
+
+                <Field name="username" class="form__input" placeholder="Nombre de usuario"/>
+                <ErrorMessage name="username" class="form__error"/>
+
+                <Field name="email" class="form__input" placeholder="Email"/>
+                <ErrorMessage name="email" class="form__error"/>
+
+                <Field name="password" type="password" class="form__input" placeholder="Contraseña"/>
+                <ErrorMessage name="password" class="form__error"/>
+
+                <Field name="password_confirmation" type="password" class="form__input" placeholder="Repita la contraseña"/>
+                <ErrorMessage name="password_confirmation" class="form__error"/>
 
                 <button type="submit" class="button__primary">Acceder</button>
+
+                <ul>
+                    <li v-for="error in errors" class="form__error">{{ error }}</li>
+                </ul>
 
                 <p class="form__link">
                     ¿Ya tienes una cuenta? <a href="/" class="link">Inicia sesión</a>
                 </p>
-            </form>
+            </Form>
         </section>
     </main>
 </template>
 
 <script>
 import axios from 'axios';
+import * as yup from 'yup';
+import {Form, Field, ErrorMessage} from "vee-validate";
 
 export default {
+    components: {
+        Form,
+        Field,
+        ErrorMessage,
+    },
+
     data() {
         return {
-            name: '',
-            username: '',
-            email: '',
-            password: '',
+            errors: [],
+            schema: yup.object().shape({
+                name: yup
+                    .string()
+                    .trim()
+                    .required("Ingrese un nombre")
+                    .min(3, "Ingrese un nombre con más de 3 caracteres"),
+                username: yup
+                    .string()
+                    .trim()
+                    .required("Ingrese un nombre de usuario")
+                    .min(3, "Ingrese un nombre de usuario con más de 3 caracteres"),
+                email: yup
+                    .string()
+                    .trim()
+                    .required('Ingrese el email')
+                    .email('El formato del email no es válido')
+                    .matches(/^((?!\.)[\w\-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/gm, 'El formato del email no es válido'),
+                password: yup
+                    .string()
+                    .trim()
+                    .required("Ingrese la contraseña")
+                    .matches(
+                        /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/,
+                        "La contraseña no cumple los requisitos. Debe tener una longitud mínima de 8 caracteres y contener una letra en mayúscula, un número y un caracter especial."
+                    ),
+                password_confirmation: yup
+                    .string()
+                    .trim()
+                    .oneOf([yup.ref("password"), null], "Las contraseñas deben coincidir")
+                    .required("Por favor, repita la contraseña")
+            })
         };
     },
 
     methods: {
-        async handleRegister() {
+        async handleRegister(values) {
             try {
-                const response = await axios.post( import.meta.env.VITE_BASE_API + "auth/register", {
-                    name: this.name,
-                    username: this.username,
-                    email: this.email,
-                    password: this.password
-                });
-
-                console.log('Respuesta de la API:', response.data);
+                const response = await axios.post( import.meta.env.VITE_BASE_API + "auth/register", values);
 
                 if (response.data.access_token) {
                     localStorage.setItem('token', response.data.access_token);
-                    this.$router.push('/profile');
+                    this.$router.push('/home');
                 }
             } catch (error) {
-                console.error('Error al crear la cuenta:', error);
-                alert('Credenciales incorrectas o error en el servidor');
+                this.errors = [];
+
+                if (error.response.status === 422) {
+                    if ('name' in error.response.data.errors) {
+                        this.errors = [...this.errors, ...error.response.data.errors.name];
+                    }
+
+                    if ('username' in error.response.data.errors) {
+                        this.errors = [...this.errors, ...error.response.data.errors.username];
+                    }
+
+                    if ('email' in error.response.data.errors) {
+                        this.errors = [...this.errors, ...error.response.data.errors.email];
+                    }
+
+                    if ('password' in error.response.data.errors) {
+                        this.errors = [...this.errors, ...error.response.data.errors.password];
+                    }
+                } else {
+                    this.errors = [...this.errors, ...error.response.data.errors];
+                }
             }
         }
     }
@@ -112,18 +174,6 @@ main::before {
     width: fit-content;
     border-radius: 2rem;
     padding: 0.5rem 1rem;
-}
-
-.content__form {
-    background-color: var(--background-color);
-    border-radius: 1rem;
-    box-shadow: 0 0.25rem 0.5rem 0 rgba(0, 0, 0, 0.25);
-
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-
-    padding: 2rem;
 }
 
 .form__title {
