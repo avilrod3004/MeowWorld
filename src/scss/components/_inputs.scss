@@ -22,6 +22,11 @@
     outline: var(--secondary-300) solid 0.2rem;
 }
 
+textarea {
+    font-family: Nunito, sans-serif;
+    font-size: 1rem;
+}
+
 .form__textarea {
     width: 100%;
 }
