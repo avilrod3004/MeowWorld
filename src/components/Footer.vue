@@ -31,7 +31,7 @@ export default {
     border-top: 1px solid black;
     padding: 1rem;
 
-    position: fixed;
+    position: sticky;
     bottom: 0;
     left: 0;
     width: 100%;
