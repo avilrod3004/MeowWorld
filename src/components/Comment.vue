@@ -6,17 +6,17 @@
             <p>{{ this.comment.user.name }}</p>
             <p>@{{ this.comment.user.username }}</p>
             <p>{{ this.comment.text }}</p>
-            <div>
-                <img src="" alt="">
-                10 me gustas
-            </div>
+            <p>{{ formatData(this.comment.created_at) }}</p>
         </div>
     </div>
 </template>
 
 <script>
+import formatData from "../helpers/formatData.js";
+
 export default {
     name: "Comment",
+    methods: {formatData},
 
     props: {
         comment: {
