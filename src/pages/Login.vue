@@ -1,7 +1,7 @@
 <template>
 <main class="login">
     <aside class="login__aside">
-        <img src="" alt="" />
+        <img src="../assets/mockup3.png" alt="" class="aside__mockup"/>
     </aside>
 
     <section class="login__content">
@@ -98,6 +98,11 @@ main {
     height: 95vh;
 
     color: var(--text-color);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4rem;
 }
 
 main::before {
@@ -108,6 +113,20 @@ main::before {
     background-repeat: repeat;
     opacity: 0.3;
     z-index: -1;
+}
+
+.aside__mockup {
+    height: 44rem;
+    filter: drop-shadow(-0.15rem 0.4rem 0.4rem rgba(0, 0, 0, 0.5));
+}
+
+@media (max-width: 870px) {
+    main {
+        gap: 0;
+    }
+    .aside__mockup {
+        display: none;
+    }
 }
 
 .login__content {
