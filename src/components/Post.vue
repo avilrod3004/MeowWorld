@@ -52,7 +52,7 @@
 
         <li v-if="allInfo" @click="openModalEditPost">Editar</li>
         <Modal :is-open="showModalEditPost" v-slot="{ values }">
-            <Form>
+            <Form :validation-schema="schema">
                 <label for="description">Cambiar la descripción del post:</label>
                 <Field
                     name="description"
@@ -60,7 +60,7 @@
                     as="textarea"
                     v-model="currentDescription"
                 />
-                <ErrorMessage name="email" class="form__error"/>
+                <ErrorMessage name="description" class="form__error"/>
             </Form>
 
             <button @click="showModalEditPost = false">Cancelar</button>
@@ -108,6 +108,13 @@ export default {
             showModalEditPost: false,
             currentDescription: "",
             showModalDeletePost: false,
+            schema: yup.object().shape({
+                description: yup
+                    .string()
+                    .trim()
+                    .required("Añade una descripción de la imagen del post.")
+                    .max(2000, "La descripción debe tener una longitud máxima de 2000 caracteres"),
+            })
         }
     },
 
@@ -154,8 +161,16 @@ export default {
             this.showModalEditPost = true
         },
 
-        editPost() {
-            console.log("Editado");
+        async editPost(values) {
+            try {
+                const responseEditPost = await api.put(`/posts/${this.post.id}`, values);
+
+                if (responseEditPost.status === 200) {
+                    this.showModalEditPost = false
+                }
+            } catch (error) {
+                console.log(error);
+            }
         }
     },
 }
