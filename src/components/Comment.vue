@@ -8,6 +8,8 @@
             <p>{{ this.comment.text }}</p>
             <p>{{ formatData(this.comment.created_at) }}</p>
         </div>
+
+        <hr>
     </div>
 </template>
 

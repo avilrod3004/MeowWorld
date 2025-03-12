@@ -33,13 +33,14 @@
                 class="icono icono-liked"
                 @click="saveLike"
             />
-            <span v-if="numLikes === 1">{{ this.numLikes }}</span>
+            <span v-if="numLikes >= 1">{{ this.numLikes }}</span>
             <span v-else>0</span>
         </li>
 
         <li class="acciones__opcion">
             <font-awesome-icon :icon="['far', 'comment']" class="icono icono-header"/>
-            <span>0</span>
+            <span v-if="numComments >= 1">{{ this.numComments }}</span>
+            <span v-else>0</span>
         </li>
 
         <li
@@ -107,6 +108,7 @@ export default {
         return {
             liked: null,
             numLikes: null,
+            numComments: null,
             showModalEditPost: false,
             currentDescription: "",
             showModalDeletePost: false,
@@ -176,6 +178,15 @@ export default {
             }
         },
 
+        async getNumComments() {
+            try {
+                const responseComments = await api.get(`/comments/post/${this.post.id}`);
+                this.numComments = responseComments.data.meta.total;
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
         async deletePost() {
             try {
                 const reponseDeletePost = await api.delete(`/posts/${this.post.id}`);
@@ -209,6 +220,7 @@ export default {
     created() {
         this.isLiked();
         this.getNumLikes();
+        this.getNumComments();
     }
 }
 </script>
