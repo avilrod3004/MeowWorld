@@ -12,6 +12,8 @@ import Chats from "../pages/Chats.vue";
 import Notifications from "../pages/Notifications.vue";
 import CatProfile from "../pages/CatProfile.vue";
 import InfoPost from "../pages/InfoPost.vue";
+import EditUserProfile from "../pages/EditUserProfile.vue";
+import EditCatProfile from "../pages/EditCatProfile.vue";
 
 const routes = [
     {
@@ -103,6 +105,18 @@ const routes = [
         ]
     },
     {
+        path: '/profile/edit',
+        component: PrivateLayout,
+        meta: { requiresAuth: true },
+        children: [
+            {
+                path: '',
+                name: 'EditUserProfile',
+                component: EditUserProfile,
+            }
+        ]
+    },
+    {
         path: '/cat/:id',
         component: PrivateLayout,
         meta: { requiresAuth: true },
@@ -117,6 +131,18 @@ const routes = [
                         id
                     }
                 }
+            }
+        ]
+    },
+    {
+        path: '/cat/edit/:id',
+        component: PrivateLayout,
+        meta: { requiresAuth: true },
+        children: [
+            {
+                path: '',
+                name: 'EditCatProfile',
+                component: () => import('../pages/EditCatProfile.vue'),
             }
         ]
     },

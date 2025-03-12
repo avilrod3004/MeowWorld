@@ -27,7 +27,7 @@
         </li>
     </ul>
 
-    <button class="button__secondary editar-perfil">Editar perfil</button>
+    <button class="button__secondary editar-perfil" @click="updateUserProfile">Editar perfil</button>
 </section>
 <p v-else>Cargando perfil...</p>
 
@@ -76,6 +76,10 @@ export default {
 
         gotToCatProfile(catId) {
             this.$router.push(`/cat/${catId}`);
+        },
+
+        updateUserProfile() {
+            this.$router.push(`/profile/edit`);
         }
     },
 

@@ -1,3 +1,38 @@
+.formulario {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.formulario__titulo {
+    font-family: "DynaPuff", system-ui;
+    font-size: 2rem;
+}
+
+.formulario__imagen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.formulario__imagen-preview {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.formulario__input-file {
+    display: none;
+}
+
+.formulario__label-input {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
 .content__form {
     background-color: var(--background-color);
     border-radius: 1rem;
@@ -22,9 +57,9 @@
     outline: var(--secondary-300) solid 0.2rem;
 }
 
-textarea {
+input, textarea {
     font-family: Nunito, sans-serif;
-    font-size: 1rem;
+    font-size: 0.9rem;
 }
 
 .form__textarea {
@@ -55,13 +90,18 @@ input[type="checkbox"]:checked {
     position: relative;
 }
 
-/* Añadir un icono o check */
 input[type="checkbox"]:checked::after {
-    content: '✔'; /* Check */
+    content: '✔';
     color: var(--checkbox-content-color); /* Color del check */
     font-size: 1rem;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+.formulario__buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
 }

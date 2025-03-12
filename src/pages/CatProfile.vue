@@ -11,7 +11,7 @@
 
     <span v-if="this.cat.en_adopcion" class="perfil__adopt"><font-awesome-icon icon="paw" class="icono icono-adopt"/> En adopción</span>
 
-    <button class="button__secondary editar-perfil">Editar perfil</button>
+    <button class="button__secondary editar-perfil" @click="updateCatProfile">Editar perfil</button>
 </section>
 <p v-else>Cargando perfil...</p>
 
@@ -53,6 +53,10 @@ export default {
             } catch (error) {
                 console.log(error);
             }
+        },
+
+        updateCatProfile() {
+            this.$router.push({ name: 'EditCatProfile', params: { id: this.cat.id } });
         }
     },
 

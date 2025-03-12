@@ -38,3 +38,37 @@
 .button__secondary:hover {
     background-color: var(--button-secundary-hover-bg);
 }
+
+.button__confirm {
+    background-color: var(--button-confirm-bg);
+    border: none;
+    border-radius: 0.5rem;
+
+    padding: 0.5rem 0.5rem;
+    margin-top: 3rem;
+
+    color: var(--button-primary-text);
+    font-size: 1.2rem;
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.button__cancel {
+    background-color: var(--button-cancel-bg);
+    border: none;
+    border-radius: 0.5rem;
+
+    padding: 0.5rem 0.5rem;
+    margin-top: 3rem;
+
+    color: var(--button-primary-text);
+    font-size: 1.2rem;
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.button__max {
+    width: 100%;
+}
