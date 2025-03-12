@@ -46,6 +46,8 @@
 import axios from 'axios';
 import * as yup from 'yup';
 import {Form, Field, ErrorMessage} from "vee-validate";
+import {useUserStore} from "../stores/userStore.js";
+import {mapState} from "pinia";
 
 export default {
     components: {
@@ -91,6 +93,10 @@ export default {
         };
     },
 
+    computed: {
+        ...mapState(useUserStore, ["user"]),
+    },
+
     methods: {
         async handleRegister(values) {
             try {
@@ -98,6 +104,8 @@ export default {
 
                 if (response.data.access_token) {
                     localStorage.setItem('token', response.data.access_token);
+                    useUserStore().setUser(response.data.data);
+
                     this.$router.push('/home');
                 }
             } catch (error) {
