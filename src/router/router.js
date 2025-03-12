@@ -14,6 +14,7 @@ import CatProfile from "../pages/CatProfile.vue";
 import InfoPost from "../pages/InfoPost.vue";
 import EditUserProfile from "../pages/EditUserProfile.vue";
 import EditCatProfile from "../pages/EditCatProfile.vue";
+import Settings from "../pages/Settings.vue";
 
 const routes = [
     {
@@ -177,31 +178,21 @@ const routes = [
     //     ]
     // },
     {
+        path: '/settings',
+        component: PrivateLayout,
+        meta: { requiresAuth: true },
+        children: [
+            {
+                path: '',
+                name: 'Settings',
+                component: Settings,
+            }
+        ]
+    },
+    {
         path: '/:pathMatch(.*)*',
         component: NotFound,
     }
-
-    // {
-    //     path: "/about",
-    //     component: () => import('../modules/pokemon/pages/AboutPage.vue')
-    // },
-    // {
-    //     path: "/:id",
-    //     name: "pokemonId",
-    //     component: () => import('../modules/pokemon/pages/Pokemon.vue'),
-    //     // opcion 2
-    //     props: (route) => {
-    //         console.log(route)
-    //         const {id} = route.params
-    //         return {
-    //             id,
-    //         }
-    //     }
-    // },
-    // {
-    //     path: "/:pathMatch(.*)*",
-    //     component: () => import('../modules/pokemon/pages/NoPageFound.vue')
-    // }
 ];
 
 const router = createRouter({
