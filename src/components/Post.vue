@@ -37,7 +37,7 @@
             <span v-else>0</span>
         </li>
 
-        <li class="acciones__opcion">
+        <li v-if="!allInfo" class="acciones__opcion">
             <font-awesome-icon :icon="['far', 'comment']" class="icono icono-header"/>
             <span v-if="numComments >= 1">{{ this.numComments }}</span>
             <span v-else>0</span>
