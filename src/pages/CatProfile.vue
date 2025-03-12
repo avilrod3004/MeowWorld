@@ -12,6 +12,13 @@
     <span v-if="this.cat.en_adopcion" class="perfil__adopt"><font-awesome-icon icon="paw" class="icono icono-adopt"/> En adopción</span>
 
     <button class="button__secondary editar-perfil" @click="updateCatProfile">Editar perfil</button>
+    <button class="button__secondary editar-perfil" @click="showModalDeleteCat = true">Eliminar gato</button>
+    <Modal :is-open="showModalDeleteCat">
+        <p>¿Quiere eliminar el perfil de este gato?</p>
+        <p>Las fotos en las que aparece no serán eliminadas</p>
+        <button @click="showModalDeleteCat = false">Cancelar</button>
+        <button @click="deleteCatProfile">Eliminar perfil</button>
+    </Modal>
 </section>
 <p v-else>Cargando perfil...</p>
 
@@ -25,12 +32,13 @@ import ListProfilePosts from "../components/ListProfilePosts.vue";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faPaw } from "@fortawesome/free-solid-svg-icons";
+import Modal from "../modals/Modal.vue";
 
 library.add(faPaw);
 
 export default {
     name: "CatProfile",
-    components: { ListProfilePosts, ProfileData, FontAwesomeIcon },
+    components: { ListProfilePosts, ProfileData, FontAwesomeIcon, Modal },
 
     props: {
         id: {
@@ -42,6 +50,7 @@ export default {
     data() {
         return {
             cat: null,
+            showModalDeleteCat: false,
         }
     },
 
@@ -57,6 +66,18 @@ export default {
 
         updateCatProfile() {
             this.$router.push({ name: 'EditCatProfile', params: { id: this.cat.id } });
+        },
+
+        async deleteCatProfile() {
+            try {
+                const responseDeleteCatProfile = await api.delete(`cats/${this.cat.id}`);
+
+                if (responseDeleteCatProfile.status === 200) {
+                    this.$router.push('/profile');
+                }
+            } catch (error) {
+                console.log(error);
+            }
         }
     },
 
