@@ -13,19 +13,9 @@
                     <font-awesome-icon icon="key" class="icono"/>
                     Cambiar contraseña
                 </li>
-                <li class="list__option">
+                <li @click="logout" class="list__option">
                     <font-awesome-icon icon="power-off" class="icono"/>
                     Cerrar sesión
-                </li>
-            </ul>
-        </div>
-
-        <div class="settings__group">
-            <h2 class="group__title">Gestion gatos</h2>
-            <ul class="group__list">
-                <li class="list__option">
-                    <font-awesome-icon icon="cat" class="icono"/>
-                    Borrar gato
                 </li>
             </ul>
         </div>
@@ -70,6 +60,9 @@
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faCircleHalfStroke, faPowerOff, faKey, faEnvelope, faCat, faTriangleExclamation, faCode, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import api from "../helpers/api.js";
+import {mapState} from "pinia";
+import {useUserStore} from "../stores/userStore.js";
 
 library.add(faCircleHalfStroke, faPowerOff, faKey, faEnvelope, faCat, faTriangleExclamation, faCode, faInfoCircle);
 
@@ -77,13 +70,31 @@ export default {
     name: "Configuration",
     components: {FontAwesomeIcon},
 
+    computed: {
+        ...mapState(useUserStore, ["user"]),
+    },
+
     methods: {
         changeTheme() {
             const body = document.body;
             const currentTheme = body.getAttribute("data-theme");
             const newTheme = currentTheme === "dark" ? "light" : "dark";
             body.setAttribute("data-theme", newTheme);
-        }
+        },
+
+        async logout() {
+            try {
+                const response = await api.get('auth/logout');
+
+                if (response.status === 200) {
+                    useUserStore().logout();
+                    localStorage.removeItem('token');
+                    window.location.href = '/';
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        },
     }
 }
 </script>
@@ -125,6 +136,8 @@ export default {
     display: flex;
     gap: 0.5rem;
     align-items: center;
+
+    cursor: pointer;
 }
 
 </style>

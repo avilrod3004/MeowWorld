@@ -15,7 +15,7 @@ export const useUserStore = defineStore("user", {
         },
         logout() {
             this.user = null;
-            // localStorage.removeItem("user");
+            localStorage.removeItem("user");
         }
     },
 
