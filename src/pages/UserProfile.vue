@@ -26,9 +26,10 @@
             >
                 <img :src="cat.image" alt="" class="gato__imagen" @click="gotToCatProfile(cat.id)">
             </li>
+            <li>[+]</li>
         </ul>
 
-        <button class="button__secondary editar-perfil" @click="updateUserProfile">Editar perfil</button>
+        <button class="button__secondary editar-perfil" @click="editUserProfile">Editar perfil</button>
     </section>
 
     <ListProfilePosts
@@ -83,7 +84,11 @@ export default {
             this.$router.push(`/cat/${catId}`);
         },
 
-        updateUserProfile() {
+        goToCreateCat() {
+
+        },
+
+        editUserProfile() {
             this.$router.push(`/profile/edit`);
         }
     },
@@ -110,6 +115,7 @@ export default {
 .perfil__gatos {
     display: flex;
     gap: 1rem;
+    flex-wrap: wrap;
 }
 
 .gato__imagen {
