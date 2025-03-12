@@ -7,6 +7,7 @@
             v-for="post in posts"
             :key="post.id"
             class="listado__post"
+            @click="openPost(post.id)"
         >
             <img :src="post.image" alt="" class="post__image">
         </li>
@@ -28,6 +29,12 @@ export default {
             type: String,
             required: true
         }
+    },
+
+    methods: {
+        openPost(id) {
+            this.$router.push({ name: 'InfoPost', params: { id: id } })
+        }
     }
 }
 </script>
@@ -42,6 +49,10 @@ export default {
     grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
     gap: 1rem;
     max-width: 100%;
+}
+
+.listado__post {
+    cursor: pointer;
 }
 
 .post__image {

@@ -1,37 +1,42 @@
 <template>
-<section v-if="user" class="perfil">
-    <ProfileData
-        :id="userId"
-        type="user"
-        :description="userDescription"
-        :username="userUsername"
-        :name="userName"
-        :img-profile="userImProfile"
+<div v-if="user && posts && cats">
+    <section class="perfil">
+        <ProfileData
+            :id="this.user.id"
+            type="user"
+            :description="this.user.description"
+            :username="this.user.username"
+            :name="this.user.name"
+            :img-profile="this.user.img_profile"
+        />
+
+        <ul class="perfil__estadistica">
+            <li class="estadistica__dato">seguidores</li>
+            <li class="estadistica__dato">seguidos</li>
+            <li v-if="cats" class="estadistica__dato">{{ cats.length }} gatos</li>
+        </ul>
+
+        <ul v-if="cats" class="perfil__gatos">
+            <li v-if="cats.length === 0">No tienes ningún gatito registrado :(</li>
+
+            <li
+                v-for="cat in cats"
+                :key="cat.id"
+                class="gatos__gato"
+            >
+                <img :src="cat.image" alt="" class="gato__imagen" @click="gotToCatProfile(cat.id)">
+            </li>
+        </ul>
+
+        <button class="button__secondary editar-perfil" @click="updateUserProfile">Editar perfil</button>
+    </section>
+
+    <ListProfilePosts
+        no-post-message="No has publicado fotos todavía :("
+        :posts="posts"
     />
-
-    <ul class="perfil__estadistica">
-        <li class="estadistica__dato">seguidores</li>
-        <li class="estadistica__dato">seguidos</li>
-        <li v-if="cats" class="estadistica__dato">{{ cats.length }} gatos</li>
-    </ul>
-
-    <ul v-if="cats" class="perfil__gatos">
-        <li v-if="cats.length === 0">No tienes ningún gatito registrado :(</li>
-
-        <li
-            v-for="cat in cats"
-            :key="cat.id"
-            class="gatos__gato"
-        >
-            <img :src="cat.image" alt="" class="gato__imagen" @click="gotToCatProfile(cat.id)">
-        </li>
-    </ul>
-
-    <button class="button__secondary editar-perfil" @click="updateUserProfile">Editar perfil</button>
-</section>
+</div>
 <p v-else>Cargando perfil...</p>
-
-<ListProfilePosts no-post-message="No has publicado fotos todavía :(" :posts="posts"/>
 </template>
 
 <script>
@@ -64,7 +69,7 @@ export default {
 
                 // Seguidores del usuario
 
-                // Seguidor por el usuario
+                // Seguidos por el usuario
 
                 // Posts del usuario
                 const responsePosts = await api.get(`posts/user/${this.user.id}`);
@@ -80,28 +85,6 @@ export default {
 
         updateUserProfile() {
             this.$router.push(`/profile/edit`);
-        }
-    },
-
-    computed: {
-        userId() {
-            return this.user ? this.user.id : '';
-        },
-
-        userName() {
-            return this.user ? this.user.name : '';
-        },
-
-        userUsername() {
-            return this.user ? this.user.username : '';
-        },
-
-        userDescription() {
-            return this.user ? this.user.description : '';
-        },
-
-        userImProfile() {
-            return this.user ? this.user.img_profile : '';
         }
     },
 
