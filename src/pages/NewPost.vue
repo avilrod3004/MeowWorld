@@ -65,7 +65,6 @@
 
 <script>
 import placeholderImage from '../assets/gato_6.png';
-import axios from 'axios';
 import * as yup from 'yup';
 import { Form, Field, ErrorMessage } from "vee-validate";
 import api from "../helpers/api.js";
@@ -169,17 +168,6 @@ export default {
 </script>
 
 <style scoped>
-.formulario {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.formulario__titulo {
-    font-family: "DynaPuff", system-ui;
-    font-size: 2rem;
-}
-
 .formulario__label-image {
     display: inline-flex;
     flex-direction: column;
@@ -204,12 +192,6 @@ export default {
     font-family: "DynaPuff", system-ui;
     color: var(--input-image-border-color);
     font-size: 1.5rem;
-}
-
-.formulario__label-input {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
 }
 
 .img__preview {
