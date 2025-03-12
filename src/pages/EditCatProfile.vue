@@ -37,6 +37,32 @@
             <ErrorMessage name="description" class="form__error"/>
         </div>
 
+<!--        <div class="formulario__input-adopcion">-->
+<!--            <Field-->
+<!--                name="en_adopcion"-->
+<!--                type="checkbox"-->
+<!--                v-model="cat.en_adopcion"-->
+<!--                class="form__checkbox"-->
+<!--            />-->
+<!--            <label for="en_adopcion">En adopción</label>-->
+<!--        </div>-->
+
+        <div class="formulario__input-adopcion">
+            <Field
+                name="en_adopcion"
+                v-slot="{ field }"
+            >
+                <input
+                    type="checkbox"
+                    v-bind="field"
+                    :checked="cat.en_adopcion"
+                    @change="field.onChange($event.target.checked)"
+                    class="form__checkbox"
+                />
+            </Field>
+            <label for="en_adopcion">En adopción</label>
+        </div>
+
         <div class="formulario__buttons">
             <button class="button__cancel button__max" @click="goBack">Cancelar</button>
             <button type="submit" class="button__confirm button__max">Aplicar cambios</button>
@@ -78,7 +104,7 @@ export default {
                     .optional()
                     .max(2000, "La descripcion no puede exceder los 2000 caracteres."),
                 en_adopcion: yup
-                    .string()
+                    .boolean()
                     .optional()
             }),
             newImage: null,
@@ -117,9 +143,12 @@ export default {
                 if (values.name && values.name !== this.cat.name) formData.append('name', values.name);
                 if (values.description && values.description !== this.cat.description) formData.append('description', values.description);
                 if (this.newImage) formData.append('image', this.newImage);
+                if (values.en_adopcion !== this.cat.en_adopcion) {
+                    formData.append('en_adopcion', values.en_adopcion);
+                }
 
                 // Verificar si hay datos para enviar
-                if (!formData.has('name') && !formData.has('description') && !formData.has('image')) {
+                if (!formData.has('name') && !formData.has('description') && !formData.has('image') && !formData.has('en_adopcion')) {
                     this.errorsServer = [...this.errorsServer, "No hay cambios para aplicar."];
                     return;
                 }
@@ -163,5 +192,9 @@ export default {
 </script>
 
 <style scoped>
-
+.formulario__input-adopcion {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
 </style>
