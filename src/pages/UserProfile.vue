@@ -26,7 +26,7 @@
             >
                 <img :src="cat.image" alt="" class="gato__imagen" @click="gotToCatProfile(cat.id)">
             </li>
-            <li>[+]</li>
+            <li @click="goToCreateCat">[+]</li>
         </ul>
 
         <button class="button__secondary editar-perfil" @click="editUserProfile">Editar perfil</button>
@@ -85,7 +85,7 @@ export default {
         },
 
         goToCreateCat() {
-
+            this.$router.push(`/cat/new`);
         },
 
         editUserProfile() {

@@ -15,6 +15,7 @@ import InfoPost from "../pages/InfoPost.vue";
 import EditUserProfile from "../pages/EditUserProfile.vue";
 import EditCatProfile from "../pages/EditCatProfile.vue";
 import Settings from "../pages/Settings.vue";
+import NewCat from "../pages/NewCat.vue";
 
 const routes = [
     {
@@ -114,6 +115,18 @@ const routes = [
                 path: '',
                 name: 'EditUserProfile',
                 component: EditUserProfile,
+            }
+        ]
+    },
+    {
+        path: '/cat/new',
+        component: PrivateLayout,
+        meta: { requiresAuth: true },
+        children: [
+            {
+                path: '',
+                name: 'NewCat',
+                component: NewCat,
             }
         ]
     },
