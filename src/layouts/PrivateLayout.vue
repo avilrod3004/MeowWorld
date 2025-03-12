@@ -26,6 +26,8 @@ export default {
     display: flex;
     flex-direction: column;
     height: 100vh;
+
+    background-color: var(--background-color);
 }
 
 main {

@@ -1,7 +1,7 @@
 <template>
 <header class="header">
     <h1 class="header__nombre">MeowWorld</h1>
-    <font-awesome-icon icon="gear" class="icono icono-header"/>
+    <font-awesome-icon icon="gear" class="icono icono-header" @click="goToSettings"/>
 </header>
 
 </template>
@@ -15,7 +15,13 @@ library.add(faGear);
 
 export default {
     name: "Header",
-    components: { FontAwesomeIcon }
+    components: { FontAwesomeIcon },
+
+    methods: {
+        goToSettings() {
+            this.$router.push("/settings");
+        }
+    }
 }
 </script>
 
@@ -27,6 +33,8 @@ export default {
 
     padding: 1rem;
     border-bottom: 1px solid black;
+
+    background-color: var(--background-color);
 }
 
 .header__nombre {

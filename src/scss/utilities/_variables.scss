@@ -74,5 +74,38 @@
 
 /* --- MODO OSCURO --- */
 [data-theme='dark'] {
+    --background-color: var(--neutral-900);
 
+    --text-color: var(--neutral-050);
+    --header-color: var(--primary-300);
+
+    --icon-color: var(--neutral-050);
+    --icon-color-active: var(--secondary-200);
+
+    --adopt-icon-color: var(--neutral-1000);
+    --adopt-text-color: var(--neutral-1000);
+    --adopt-bg-color: var(--primary-200);
+
+    --icon-unliked-color: var(--neutral-100);
+    --icon-liked-color: var(--error-dark-mode);
+
+    --link-color: var(--secondary-200);
+
+    --button-primary-bg: var(--primary-200);
+    --button-primary-text: var(--neutral-1000);
+    --button-primary-hover-bg: var(--primary-300);
+
+    --button-secundary-bg: var(--neutral-1000);
+    --button-secundary-border: var(--secondary-300);
+    --button-secundary-text: var(--secondary-300);
+    --button-secundary-hover-bg: var(--neutral-900);
+
+    --button-confirm-bg: var(--success-dark-mode);
+    --button-cancel-bg: var(--error-dark-mode);
+
+    --input-image-border-color: var(--primary-300);
+    --input-bg: var(--primary-900);
+    --checkbox-bg: var(--secondary-400);
+    --checkbox-content-color: var(--neutral-000);
+    --form-error: var(--error-dark-mode);
 }
