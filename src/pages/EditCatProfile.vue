@@ -160,8 +160,12 @@ export default {
                         this.errorsServer = [...this.errorsServer, ...error.response.data.errors.description];
                     }
 
-                    if ('img_profile' in error.response.data.errors) {
-                        this.errorsServer = [...this.errorsServer, ...error.response.data.errors.img_profile];
+                    if ('image' in error.response.data.errors) {
+                        this.errorsServer = [...this.errorsServer, ...error.response.data.errors.image];
+                    }
+
+                    if ('en_adopcion' in error.response.data.errors) {
+                        this.errorsServer = [...this.errorsServer, ...error.response.data.errors.en_adopcion];
                     }
                 } else {
                     this.errorsServer = [...this.errorsServer, ...error.response.data.errors];
