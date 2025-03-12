@@ -33,7 +33,8 @@
                 class="icono icono-liked"
                 @click="saveLike"
             />
-            <span>0</span>
+            <span v-if="numLikes === 1">{{ this.numLikes }}</span>
+            <span v-else>0</span>
         </li>
 
         <li class="acciones__opcion">
@@ -105,6 +106,7 @@ export default {
     data() {
         return {
             liked: null,
+            numLikes: null,
             showModalEditPost: false,
             currentDescription: "",
             showModalDeletePost: false,
@@ -132,15 +134,45 @@ export default {
     methods: {
         formatData,
 
-        saveLike() {
+        async isLiked() {
+            try {
+                const reponseLike = await api.get(`likes/isLiked/${this.post.id}`);
+
+                if (reponseLike.status === 200) {
+                    this.liked = reponseLike.data.isLiked;
+                }
+            }
+            catch(error) {
+                console.log(error);
+            }
+        },
+
+        async getNumLikes() {
+            try {
+                const reponseNumLike = await api.get(`likes/post/${this.post.id}`);
+                this.numLikes = reponseNumLike.data.likes;
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        async saveLike() {
             this.liked = !this.liked;
 
             if (this.liked) {
-                console.log("Like guardado");
-                // Aquí harías la petición para guardar el like
+                try {
+                    const responseLike = await api.post(`likes`, {"post_id": this.post.id});
+                    await this.getNumLikes();
+                } catch (error) {
+                    console.log(error);
+                }
             } else {
-                console.log("Like eliminado");
-                // Aquí harías la petición para quitar el like
+                try {
+                    const responseLike = await api.delete(`likes/${this.post.id}`);
+                    await this.getNumLikes();
+                } catch (error) {
+                    console.log(error);
+                }
             }
         },
 
@@ -173,6 +205,11 @@ export default {
             }
         }
     },
+
+    created() {
+        this.isLiked();
+        this.getNumLikes();
+    }
 }
 </script>
 
