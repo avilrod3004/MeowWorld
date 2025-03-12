@@ -37,16 +37,6 @@
             <ErrorMessage name="description" class="form__error"/>
         </div>
 
-<!--        <div class="formulario__input-adopcion">-->
-<!--            <Field-->
-<!--                name="en_adopcion"-->
-<!--                type="checkbox"-->
-<!--                v-model="cat.en_adopcion"-->
-<!--                class="form__checkbox"-->
-<!--            />-->
-<!--            <label for="en_adopcion">En adopción</label>-->
-<!--        </div>-->
-
         <div class="formulario__input-adopcion">
             <Field
                 name="en_adopcion"
