@@ -37,6 +37,9 @@
 import axios from 'axios';
 import * as yup from 'yup';
 import {Form, Field, ErrorMessage} from "vee-validate";
+import {useUserStore} from "../stores/userStore.js";
+import {useAuthStore} from "../stores/authStore.js";
+import {mapState} from "pinia";
 
 export default {
     components: {
@@ -63,6 +66,11 @@ export default {
         };
     },
 
+    computed: {
+        ...mapState(useUserStore, ["user"]),
+        ...mapState(useAuthStore, ["token"]),
+    },
+
     methods: {
         async handleLogin(values) {
             try {
@@ -70,6 +78,9 @@ export default {
 
                 if (response.data.access_token) {
                     localStorage.setItem('token', response.data.access_token);
+                    // useAuthStore().setToken(response.data.access_token);
+                    useUserStore().setUser(response.data.data);
+
                     this.$router.push('/home');
                 }
             } catch (error) {
