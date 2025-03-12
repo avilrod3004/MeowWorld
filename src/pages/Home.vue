@@ -1,6 +1,6 @@
 <template>
     <div v-if="posts && posts.length > 0">
-        <PostPreview v-for="post in posts" :key="post.id" :post="post" :all-info="false"/>
+        <Post v-for="post in posts" :key="post.id" :post="post" :all-info="false"/>
     </div>
 
     <p v-if="!posts">Cargando....</p>
@@ -13,7 +13,7 @@ import api from "../helpers/api.js";
 
 export default {
     name: "Home",
-    components: {PostPreview: Post},
+    components: {Post},
 
     data() {
         return {
