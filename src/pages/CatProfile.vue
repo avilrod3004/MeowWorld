@@ -6,7 +6,7 @@
         :description="this.cat.description"
         :username="this.cat.owner.username"
         :name="this.cat.name"
-        :img-profile="this.cat.image"
+        :img-profile="this.cat?.image || defaultImage"
     />
 
     <span v-if="this.cat.en_adopcion" class="perfil__adopt"><font-awesome-icon icon="paw" class="icono icono-adopt"/> En adopción</span>
@@ -37,6 +37,8 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { faPaw } from "@fortawesome/free-solid-svg-icons";
 import Modal from "../modals/Modal.vue";
 import {useUserStore} from "../stores/userStore.js";
+import defaultImg from '../assets/default_cat_img_profile.png';
+
 
 library.add(faPaw);
 
@@ -57,7 +59,8 @@ export default {
             posts: null,
             showModalDeleteCat: false,
             catOwner: null,
-            authUserId: null
+            authUserId: null,
+            defaultImage: defaultImg,
         }
     },
 

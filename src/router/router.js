@@ -16,6 +16,7 @@ import EditUserProfile from "../pages/EditUserProfile.vue";
 import EditCatProfile from "../pages/EditCatProfile.vue";
 import Settings from "../pages/Settings.vue";
 import NewCat from "../pages/NewCat.vue";
+import OtherUserProfile from "../pages/OtherUserProfile.vue";
 
 const routes = [
     {
@@ -172,24 +173,18 @@ const routes = [
             }
         ]
     },
-    // {
-    //     path: '/user/profile/:id',
-    //     component: PrivateLayout,
-    //     meta: { requiresAuth: true },
-    //     children: [
-    //         {
-    //             path: '',
-    //             name: 'UserId',
-    //             component: UserProfile,
-    //             props: (route) => {
-    //                 const { id } = route.params;
-    //                 return {
-    //                     id,
-    //                 }
-    //             }
-    //         }
-    //     ]
-    // },
+    {
+        path: '/user/:id',
+        component: PrivateLayout,
+        meta: { requiresAuth: true },
+        children: [
+            {
+                path: '',
+                name: 'OtherUserProfile',
+                component: () => import('../pages/OtherUserProfile.vue'),
+            }
+        ]
+    },
     {
         path: '/settings',
         component: PrivateLayout,

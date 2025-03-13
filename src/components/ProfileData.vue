@@ -1,6 +1,6 @@
 <template>
     <div class="perfil__datos">
-        <img :src="this.imgProfile" alt="" class="datos__imagen">
+        <img :src="this?.imgProfile" alt="" class="datos__imagen">
 
         <div class="datos__listado">
             <p class="listado__nombre">{{ this.name }}</p>

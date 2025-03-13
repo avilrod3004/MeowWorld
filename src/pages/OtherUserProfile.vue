@@ -7,7 +7,7 @@
             :description="this.user.description"
             :username="this.user.username"
             :name="this.user.name"
-            :img-profile="this.user.img_profile"
+            :img-profile="this.user?.img_profile || defaultImage"
         />
 
         <ul class="perfil__estadistica">
@@ -18,7 +18,7 @@
 
         <ListCatsProfile :cats="cats" />
 
-        <button class="button__secondary editar-perfil" @click="editUserProfile">Editar perfil</button>
+        <button class="button__primary" @click="editUserProfile">Seguir</button>
     </section>
 
     <ListProfilePosts
@@ -34,6 +34,8 @@ import api from '../helpers/api.js';
 import ProfileData from "../components/ProfileData.vue";
 import ListProfilePosts from "../components/ListProfilePosts.vue";
 import ListCatsProfile from "../components/ListCatsProfile.vue";
+import defaultImg from '../assets/default_img_profile.png';
+
 
 export default {
     name: 'Profile',
@@ -41,9 +43,11 @@ export default {
 
     data() {
         return {
+            userId: null,
             user: null,
             cats: null,
             posts: null,
+            defaultImage: defaultImg,
         };
     },
 
@@ -51,11 +55,11 @@ export default {
         async getUserData() {
             try {
                 // Datos del perfil del usuario
-                const responseProfile = await api.get('auth/me');
+                const responseProfile = await api.get(`users/${this.userId}`);
                 this.user = responseProfile.data.data;
 
                 // Gatos del usuario
-                const responseCats = await api.get(`cats/user/${this.user.id}`);
+                const responseCats = await api.get(`cats/user/${this.userId}`);
                 this.cats = responseCats.data.data;
 
                 // Seguidores del usuario
@@ -63,7 +67,7 @@ export default {
                 // Seguidos por el usuario
 
                 // Posts del usuario
-                const responsePosts = await api.get(`posts/user/${this.user.id}`);
+                const responsePosts = await api.get(`posts/user/${this.userId}`);
                 this.posts = responsePosts.data.data;
             } catch (error) {
                 console.error('Error al obtener el perfil del usuario:', error);
@@ -76,6 +80,7 @@ export default {
     },
 
     created() {
+        this.userId = this.$route.params.id;
         this.getUserData();
     }
 };

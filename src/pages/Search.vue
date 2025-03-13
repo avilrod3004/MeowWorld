@@ -118,7 +118,7 @@ export default {
         },
 
         gotToUserProfile(userId) {
-            this.$router.push({ path: `/user/${userId}` });
+            this.$router.push({ name: 'OtherUserProfile', params: { id: userId } });
         }
     }
 
