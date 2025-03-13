@@ -1,5 +1,5 @@
 <template>
-    <h1 class="titulo">Busqueda</h1>
+    <h1 class="titulo">Búsqueda</h1>
 
     <Form @submit="searchQuery" :validation-schema="schema" class="formulario">
         <Field aria-label="Tipo de cuenta" as="select" name="category" class="form__input" :v-model="selectedCategory">
