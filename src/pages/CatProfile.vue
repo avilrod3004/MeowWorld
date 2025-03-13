@@ -11,8 +11,11 @@
 
     <span v-if="this.cat.en_adopcion" class="perfil__adopt"><font-awesome-icon icon="paw" class="icono icono-adopt"/> En adopción</span>
 
-    <button class="button__secondary editar-perfil" @click="updateCatProfile">Editar perfil</button>
-    <button class="button__secondary editar-perfil" @click="showModalDeleteCat = true">Eliminar gato</button>
+    <div v-if="this.catOwner && this.authUserId && (this.catOwner === this.authUserId)">
+        <button class="button__secondary editar-perfil" @click="updateCatProfile">Editar perfil</button>
+        <button class="button__secondary editar-perfil" @click="showModalDeleteCat = true">Eliminar gato</button>
+    </div>
+
     <Modal :is-open="showModalDeleteCat">
         <p>¿Quiere eliminar el perfil de este gato?</p>
         <p>Las fotos en las que aparece no serán eliminadas</p>
@@ -33,6 +36,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faPaw } from "@fortawesome/free-solid-svg-icons";
 import Modal from "../modals/Modal.vue";
+import {useUserStore} from "../stores/userStore.js";
 
 library.add(faPaw);
 
@@ -52,6 +56,8 @@ export default {
             cat: null,
             posts: null,
             showModalDeleteCat: false,
+            catOwner: null,
+            authUserId: null
         }
     },
 
@@ -60,6 +66,7 @@ export default {
             try {
                 const responseCatProfile = await api.get(`cats/${this.id}`);
                 this.cat = responseCatProfile.data.data
+                this.catOwner = responseCatProfile.data.data.owner.id;
 
                 const responseCatPosts = await api.get(`catpost/cat/${this.id}`)
                 this.posts = responseCatPosts.data.data
@@ -87,6 +94,7 @@ export default {
 
     created() {
         this.getCatData();
+        this.authUserId = useUserStore().getUser.id
     }
 }
 
