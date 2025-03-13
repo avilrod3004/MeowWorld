@@ -1,4 +1,5 @@
 <template>
+    <Spinner v-if="loadingPage"/>
     <Form
         class="formulario"
         @submit="updateUserProfile"
@@ -44,16 +45,15 @@
             <ErrorMessage name="description" class="form__error"/>
         </div>
 
+        <Spinner v-if="loadingChanges"/>
+
         <div class="formulario__buttons">
             <button class="button__cancel button__max" @click="goBack">Cancelar</button>
             <button type="submit" class="button__confirm button__max">Aplicar cambios</button>
         </div>
 
-        <ul>
-            <li v-for="error in this.errorsServer" class="form__error">{{ error }}</li>
-        </ul>
+        <ErrorsList :errors-server="this.errorsServer"/>
     </Form>
-    <p v-else>Cargando...</p>
 </template>
 
 <script>
@@ -61,12 +61,16 @@ import * as yup from 'yup';
 import { Form, Field, ErrorMessage } from "vee-validate";
 import api from "../helpers/api.js";
 import defaultImg from '../assets/default_img_profile.png';
+import Spinner from "../components/Spinner.vue";
+import ErrorsList from "../components/ErrorsList.vue";
 
 
 export default {
     name: "EditUserProfile",
 
     components: {
+        ErrorsList,
+        Spinner,
         Form,
         Field,
         ErrorMessage,
@@ -92,6 +96,8 @@ export default {
             }),
             newImage: null,
             defaultImage: defaultImg,
+            loadingPage: true,
+            loadingChanges: false,
         }
     },
 
@@ -120,6 +126,7 @@ export default {
 
         async updateUserProfile(values) {
             try {
+                this.loadingChanges = true;
                 const formData = new FormData();
 
                 // Comparar los valores del formulario con los datos del usuario
@@ -137,10 +144,12 @@ export default {
                 const responseUpdateProfile = await api.post(`users/${this.user.id}/profile`, formData);
 
                 if (responseUpdateProfile.status === 200) {
+                    this.loadingChanges = false;
                     this.$router.push("/profile");
                 }
             } catch (error) {
                 this.errorsServer = [];
+                this.loadingChanges = false;
 
                 if (error.response.status === 422) {
                     if ('name' in error.response.data.errors) {
@@ -169,8 +178,9 @@ export default {
         }
     },
 
-    created() {
-        this.getUserData();
+    async created() {
+        await this.getUserData();
+        this.loadingPage = false;
     }
 }
 </script>
