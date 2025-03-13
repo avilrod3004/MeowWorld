@@ -1,7 +1,5 @@
 <template>
     <ul v-if="cats" class="perfil__gatos">
-        <li v-if="cats.length === 0">No tienes ningún gatito registrado :(</li>
-
         <li
             v-for="cat in cats"
             :key="cat.id"
@@ -9,7 +7,6 @@
         >
             <img :src="cat.image" alt="" class="gato__imagen" @click="gotToCatProfile(cat.id)">
         </li>
-        <li @click="goToCreateCat">[+]</li>
     </ul>
 </template>
 
@@ -27,10 +24,6 @@ export default {
     methods: {
         gotToCatProfile(catId) {
             this.$router.push(`/cat/${catId}`);
-        },
-
-        goToCreateCat() {
-            this.$router.push(`/cat/new`);
         },
     }
 }

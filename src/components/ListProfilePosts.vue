@@ -1,6 +1,6 @@
 <template>
 <section v-if="posts" class="perfil__posts">
-    <p v-if="posts.length === 0">No has publicado fotos todavía :(</p>
+    <p v-if="posts.length === 0" class="sin_resultado">No hay post publicados</p>
 
     <ul class="posts__listado">
         <li
@@ -13,7 +13,6 @@
         </li>
     </ul>
 </section>
-<p v-else>Cargando posts...</p>
 </template>
 
 <script>
@@ -25,10 +24,6 @@ export default {
             type: Array,
             required: true
         },
-        noPostMessage: {
-            type: String,
-            required: true
-        }
     },
 
     methods: {
