@@ -1,69 +1,66 @@
 <template>
-    <Form
-        @submit="submitPost"
-        :validation-schema="schema"
-        v-slot="{ values, errors, setFieldValue }"
-        class="formulario"
-        :initial-values="{ gatos: [] }"
-    >
-        <h1 class="formulario__titulo">Nuevo post</h1>
+    <Spinner v-if="this.loadingPage"/>
+    <div v-else>
+        <Form
+            @submit="submitPost"
+            :validation-schema="schema"
+            v-slot="{ values, errors, setFieldValue }"
+            class="formulario"
+            :initial-values="{ gatos: [] }"
+        >
+            <h1 class="formulario__titulo">Nuevo post</h1>
 
-        <div>
-            <label for="imagen" class="formulario__label-image">
-                <img :src="imagePreview || placeholderImage" alt="Subir imagen" class="img__preview">
-                <span class="label-image__text">Subir imagen</span>
-            </label>
+            <div>
+                <label for="imagen" class="formulario__label-image">
+                    <img :src="imagePreview || placeholderImage" alt="Subir imagen" class="img__preview">
+                    <span class="label-image__text">Subir imagen</span>
+                </label>
 
-            <input
-                type="file"
-                id="imagen"
-                name="imagen"
-                accept="image/*"
-                class="formulario__input-image"
-                @change="handleImageChange"
-            />
-            <span v-if="imageError" class="error">{{ imageError }}</span>
-        </div>
+                <input
+                    type="file"
+                    id="imagen"
+                    name="imagen"
+                    accept="image/*"
+                    class="formulario__input-image"
+                    @change="handleImageChange"
+                />
+                <span v-if="imageError" class="form__error">{{ imageError }}</span>
+            </div>
 
-        <!-- Descripción -->
-        <div class="formulario__label-input">
-            <label for="descripcion">Añade una descripción:</label>
-            <Field name="descripcion" v-slot="{ field }">
+            <div class="formulario__label-input">
+                <label for="descripcion">Añade una descripción:</label>
+                <Field name="descripcion" v-slot="{ field }">
                 <textarea
                     id="descripcion"
                     class="form__input form__textarea"
                     v-bind="field"
                 ></textarea>
-            </Field>
-            <ErrorMessage name="descripcion" class="error" />
-        </div>
+                </Field>
+                <ErrorMessage name="descripcion" class="form__error" />
+            </div>
 
-        <!-- Checkboxes -->
-        <div class="formulario__label-input">
-            <label>¿Quién aparece en la foto?</label>
+            <div class="formulario__label-input">
+                <label>¿Quién aparece en la foto?</label>
 
-            <Field name="gatos" v-slot="{ field }">
-                <div v-for="(cat, index) in cats" :key="index" class="form__checkbox">
-                    <input
-                        type="checkbox"
-                        :id="'opcion' + index"
-                        :value="cat.id"
-                        :checked="field.value.includes(cat.id)"
-                        @change="handleCheckboxChange($event, cat.id, setFieldValue, values)"
-                    />
-                    <label :for="'opcion' + index">{{ cat.name }}</label>
-                </div>
-            </Field>
-        </div>
+                <Field name="gatos" v-slot="{ field }">
+                    <div v-for="(cat, index) in cats" :key="index" class="form__checkbox">
+                        <input
+                            type="checkbox"
+                            :id="'opcion' + index"
+                            :value="cat.id"
+                            :checked="field.value.includes(cat.id)"
+                            @change="handleCheckboxChange($event, cat.id, setFieldValue, values)"
+                        />
+                        <label :for="'opcion' + index">{{ cat.name }}</label>
+                    </div>
+                </Field>
+            </div>
 
-
-
-        <button type="submit" class="button__primary">Publicar</button>
-
-        <ul>
-            <li v-for="error in this.errorsServer" class="form__error">{{ error }}</li>
-        </ul>
-    </Form>
+            <Spinner v-if="loadingPost"/>
+            <button type="submit" class="button__primary">Publicar</button>
+            <ErrorsList :errorsServer="this.errorsServer" />
+        </Form>
+    </div>
 </template>
 
 <script>
@@ -71,11 +68,15 @@ import placeholderImage from '../assets/gato_6.png';
 import * as yup from 'yup';
 import { Form, Field, ErrorMessage } from "vee-validate";
 import api from "../helpers/api.js";
+import ErrorsList from "../components/ErrorsList.vue";
+import Spinner from "../components/Spinner.vue";
 
 export default {
     name: "NewPost",
 
     components: {
+        Spinner,
+        ErrorsList,
         Form,
         Field,
         ErrorMessage,
@@ -97,6 +98,8 @@ export default {
                 gatos: yup.array().default([]),
             }),
             errorsServer: [],
+            loadingPage: true,
+            loadingPost: false,
         };
     },
 
@@ -129,7 +132,6 @@ export default {
         handleCheckboxChange(event, catId, setFieldValue, values) {
             const checked = event.target.checked;
 
-            // Asegúrate de que values.gatos sea un array
             let updatedCats = Array.isArray(values.gatos) ? [...values.gatos] : [];
 
             if (checked) {
@@ -140,17 +142,13 @@ export default {
                 updatedCats = updatedCats.filter((id) => id !== catId);
             }
 
-            // Actualizar el valor del campo "gatos"
             setFieldValue("gatos", updatedCats);
 
-            console.log("Gatos seleccionados:", updatedCats); // 🔍 Verifica los valores
+            console.log("Gatos seleccionados:", updatedCats);
         },
 
 
         async submitPost(values) {
-            console.log("Valores del formulario:", values); // <-- Revisa los valores completos
-            console.log("Gatos seleccionados:", values.gatos);
-
             if (!this.selectedImage) {
                 this.imageError = "Añade la imagen del post.";
                 return;
@@ -161,14 +159,12 @@ export default {
             formData.append("description", values.descripcion);
 
             try {
+                this.loadingPost = true;
                 const responseNewPost = await api.post( "posts", formData);
 
                 if (responseNewPost.status === 201) {
                     const postId = responseNewPost.data.data.id;
 
-                    console.log(values.gatos); // --> undefined ??
-
-                    // Registrar la relacion entre el post y los gatos seleccionados
                     if (values.gatos && values.gatos.length > 0) {
                         await Promise.all(
                             values.gatos.map(async (catId) => {
@@ -179,11 +175,12 @@ export default {
                             })
                         );
                     }
-
+                    this.loadingPost = false;
                     this.$router.push('/profile');
                 }
             } catch (error) {
                 this.errorsServer = [];
+                this.loadingPost = false;
 
                 if (error.response.status === 422) {
                     if ('image' in error.response.data.errors) {
@@ -200,8 +197,9 @@ export default {
         }
     },
 
-    created() {
-        this.getUserCats()
+    async created() {
+        await this.getUserCats()
+        this.loadingPage = false;
     }
 };
 </script>
