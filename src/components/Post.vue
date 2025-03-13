@@ -54,7 +54,7 @@
 
         <li v-if="allInfo" @click="openModalEditPost">Editar</li>
         <Modal :is-open="showModalEditPost" v-slot="{ values }">
-            <Form :validation-schema="schema">
+            <Form @submit="editPost" :validation-schema="schema">
                 <label for="description">Cambiar la descripción del post:</label>
                 <Field
                     name="description"
@@ -63,10 +63,10 @@
                     v-model="currentDescription"
                 />
                 <ErrorMessage name="description" class="form__error"/>
-            </Form>
 
-            <button @click="showModalEditPost = false">Cancelar</button>
-            <button @click="editPost">Actualizar post</button>
+                <button @click="showModalEditPost = false">Cancelar</button>
+                <button type="submit">Actualizar post</button>
+            </Form>
         </Modal>
 
         <li v-if="allInfo" @click="showModalDeletePost = true">Borrar</li>
@@ -206,10 +206,15 @@ export default {
 
         async editPost(values) {
             try {
-                const responseEditPost = await api.put(`/posts/${this.post.id}`, values);
+                const responseEditPost = await api.put(`/posts/${this.post.id}`,
+                    {
+                        description: values.description,
+                    }
+                );
 
                 if (responseEditPost.status === 200) {
                     this.showModalEditPost = false
+                    this.$router.push('/profile')
                 }
             } catch (error) {
                 console.log(error);
