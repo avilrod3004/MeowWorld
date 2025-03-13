@@ -23,7 +23,7 @@ export default {
 
     methods: {
         gotToCatProfile(catId) {
-            this.$router.push(`/cat/${catId}`);
+            this.$router.push({ name: "CatId", params: { id: catId } });
         },
     }
 }

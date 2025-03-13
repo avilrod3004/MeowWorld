@@ -138,14 +138,8 @@ const routes = [
         children: [
             {
                 path: '',
-                name: 'CarId',
+                name: 'CatId',
                 component: () => import("../pages/CatProfile.vue"),
-                props: (route) => {
-                    const { id } = route.params;
-                    return {
-                        id
-                    }
-                }
             }
         ]
     },

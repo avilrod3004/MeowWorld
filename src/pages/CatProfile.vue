@@ -46,15 +46,9 @@ export default {
     name: "CatProfile",
     components: { ListProfilePosts, ProfileData, FontAwesomeIcon, Modal },
 
-    props: {
-        id: {
-            type: Number,
-            required: true
-        }
-    },
-
     data() {
         return {
+            catId: null,
             cat: null,
             posts: null,
             showModalDeleteCat: false,
@@ -67,11 +61,11 @@ export default {
     methods: {
         async getCatData() {
             try {
-                const responseCatProfile = await api.get(`cats/${this.id}`);
+                const responseCatProfile = await api.get(`cats/${this.catId}`);
                 this.cat = responseCatProfile.data.data
                 this.catOwner = responseCatProfile.data.data.owner.id;
 
-                const responseCatPosts = await api.get(`catpost/cat/${this.id}`)
+                const responseCatPosts = await api.get(`catpost/cat/${this.catId}`)
                 this.posts = responseCatPosts.data.data
             } catch (error) {
                 console.log(error);
@@ -79,12 +73,12 @@ export default {
         },
 
         updateCatProfile() {
-            this.$router.push({ name: 'EditCatProfile', params: { id: this.cat.id } });
+            this.$router.push({ name: 'EditCatProfile', params: { id: this.catId } });
         },
 
         async deleteCatProfile() {
             try {
-                const responseDeleteCatProfile = await api.delete(`cats/${this.cat.id}`);
+                const responseDeleteCatProfile = await api.delete(`cats/${this.catId}`);
 
                 if (responseDeleteCatProfile.status === 200) {
                     this.$router.push('/profile');
@@ -96,6 +90,7 @@ export default {
     },
 
     created() {
+        this.catId = this.$route.params.id;
         this.getCatData();
         this.authUserId = useUserStore().getUser.id
     }
