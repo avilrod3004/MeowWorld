@@ -70,6 +70,13 @@ export default {
     name: "Configuration",
     components: {FontAwesomeIcon},
 
+    data() {
+        return {
+            showModalEditEmail: null,
+            showModalEditPassword: null,
+        }
+    },
+
     computed: {
         ...mapState(useUserStore, ["user"]),
     },
