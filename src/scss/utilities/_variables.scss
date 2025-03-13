@@ -37,6 +37,7 @@
 
     /* --- MODO CLARO --- */
     --background-color: var(--neutral-000);
+    --color-spinner: var(--primary-300);
 
     --text-color: var(--neutral-1000);
     --header-color: var(--primary-500);
@@ -75,6 +76,7 @@
 /* --- MODO OSCURO --- */
 [data-theme='dark'] {
     --background-color: var(--neutral-900);
+    --color-spinner: var(--primary-700);
 
     --text-color: var(--neutral-050);
     --header-color: var(--primary-300);

@@ -1,12 +1,14 @@
 <template>
-    <div v-if="posts && posts.length > 0">
-        <Post v-for="post in posts" :key="post.id" :post="post" :all-info="false"/>
+    <Spinner v-if="loading"/>
+    <div v-else>
+        <div v-if="posts && posts.length > 0">
+            <Post v-for="post in posts" :key="post.id" :post="post" :all-info="false"/>
+        </div>
+
+        <p v-if="!posts || posts.length === 0" class="sin_resultado">No hay posts por aquí... 🐾 ¿Están todos los gatitos dormidos?</p>
+
+        <ErrorsList :errorsServer="errorsServer"/>
     </div>
-
-    <p v-if="posts && posts.length === 0" class="sin_resultado">No hay posts por aquí... 🐾 ¿Están todos los gatitos dormidos?</p>
-
-    <p v-if="!posts">Cargando....</p>
-    <ErrorsList :errorsServer="errorsServer"/>
 </template>
 
 <script>
@@ -23,6 +25,7 @@ export default {
         return {
             posts: null,
             errorsServer: null,
+            loading: true,
         }
     },
 
@@ -37,8 +40,9 @@ export default {
         }
     },
 
-    created() {
-        this.getLastPosts();
+    async created() {
+        await this.getLastPosts();
+        this.loading = false;
     }
 }
 </script>
