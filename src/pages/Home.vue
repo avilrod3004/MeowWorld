@@ -4,7 +4,11 @@
     </div>
 
     <p v-if="!posts">Cargando....</p>
-    <p v-if="posts && posts.length === 0">No hay post publicados</p>
+    <p v-if="posts && posts.length === 0" class="sin_resultado">No hay posts por aquí... 🐾 ¿Están todos los gatitos dormidos?</p>
+
+    <ul v-if="errorsServer">
+        <li v-for="error in errorsServer" class="form__error">{{ error }}</li>
+    </ul>
 </template>
 
 <script>
@@ -18,6 +22,7 @@ export default {
     data() {
         return {
             posts: null,
+            errorsServer: null,
         }
     },
 
@@ -27,7 +32,7 @@ export default {
                 const responsePosts = await api.get('posts')
                 this.posts = responsePosts.data.data;
             } catch (error) {
-                console.log(error);
+                this.errorsServer = error.response?.data.errors || ["[ERROR]: Ha ocurrido un error inesperado. Vuelva a interntarlo más tarde."];
             }
         }
     },
