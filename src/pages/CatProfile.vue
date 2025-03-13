@@ -1,7 +1,8 @@
 <template>
-<section v-if="cat" class="perfil">
+    <Spinner v-if="loading"/>
+    <section v-else class="perfil">
     <ProfileData
-        :id="this.id"
+        :id="this.cat.id"
         type="cat"
         :description="this.cat.description"
         :username="this.cat.owner.username"
@@ -11,9 +12,11 @@
 
     <span v-if="this.cat.en_adopcion" class="perfil__adopt"><font-awesome-icon icon="paw" class="icono icono-adopt"/> En adopción</span>
 
-    <div v-if="this.catOwner && this.authUserId && (this.catOwner === this.authUserId)">
+    <div v-if="this.catOwner && this.authUserId && (this.catOwner === this.authUserId)" class="buttons">
         <button class="button__secondary editar-perfil" @click="updateCatProfile">Editar perfil</button>
         <button class="button__secondary editar-perfil" @click="showModalDeleteCat = true">Eliminar gato</button>
+
+        <ErrorsList :errors-server="errorsServer"/>
     </div>
 
     <Modal :is-open="showModalDeleteCat">
@@ -23,9 +26,8 @@
         <button @click="deleteCatProfile">Eliminar perfil</button>
     </Modal>
 </section>
-<p v-else>Cargando perfil...</p>
 
-<ListProfilePosts v-if="posts" no-post-message="no hay fotos de este gato" :posts="posts"/>
+<ListProfilePosts v-if="posts" :posts="posts"/>
 </template>
 
 <script>
@@ -38,13 +40,15 @@ import { faPaw } from "@fortawesome/free-solid-svg-icons";
 import Modal from "../modals/Modal.vue";
 import {useUserStore} from "../stores/userStore.js";
 import defaultImg from '../assets/default_cat_img_profile.png';
+import Spinner from "../components/Spinner.vue";
+import ErrorsList from "../components/ErrorsList.vue";
 
 
 library.add(faPaw);
 
 export default {
     name: "CatProfile",
-    components: { ListProfilePosts, ProfileData, FontAwesomeIcon, Modal },
+    components: {ErrorsList, Spinner, ListProfilePosts, ProfileData, FontAwesomeIcon, Modal },
 
     data() {
         return {
@@ -55,12 +59,15 @@ export default {
             catOwner: null,
             authUserId: null,
             defaultImage: defaultImg,
+            loading: true,
+            errorsServer: null,
         }
     },
 
     methods: {
         async getCatData() {
             try {
+                this.errorsServer = null;
                 const responseCatProfile = await api.get(`cats/${this.catId}`);
                 this.cat = responseCatProfile.data.data
                 this.catOwner = responseCatProfile.data.data.owner.id;
@@ -68,7 +75,8 @@ export default {
                 const responseCatPosts = await api.get(`catpost/cat/${this.catId}`)
                 this.posts = responseCatPosts.data.data
             } catch (error) {
-                console.log(error);
+                this.errorsServer = error.response?.data.errors || ["Ha ocurrido un error al cargar los datos del perfil. Vuelva a interntarlo más tarde."];
+                this.loading = false;
             }
         },
 
@@ -78,21 +86,26 @@ export default {
 
         async deleteCatProfile() {
             try {
+                this.loading = true;
+                this.errorsServer = null;
                 const responseDeleteCatProfile = await api.delete(`cats/${this.catId}`);
 
                 if (responseDeleteCatProfile.status === 200) {
                     this.$router.push('/profile');
                 }
             } catch (error) {
-                console.log(error);
+                this.errorsServer = error.response?.data.errors || ["Ha ocurrido un error al intentar eliminar el gato."];
+                this.loading = false;
             }
         }
     },
 
-    created() {
+    async created() {
         this.catId = this.$route.params.id;
-        this.getCatData();
         this.authUserId = useUserStore().getUser.id
+        await this.getCatData();
+
+        this.loading = false;
     }
 }
 
@@ -120,5 +133,11 @@ export default {
 
 .editar-perfil {
     width: 100%;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 }
 </style>

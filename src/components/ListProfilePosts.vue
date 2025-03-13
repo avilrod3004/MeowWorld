@@ -1,18 +1,22 @@
 <template>
-<section v-if="posts" class="perfil__posts">
-    <p v-if="posts.length === 0" class="sin_resultado">No hay post publicados</p>
+    <section v-if="posts" class="perfil__posts">
+        <h1 class="titulo">Posts</h1>
 
-    <ul class="posts__listado">
-        <li
-            v-for="post in posts"
-            :key="post.id"
-            class="listado__post"
-            @click="openPost(post.id)"
-        >
-            <img :src="post.image" alt="" class="post__image">
-        </li>
-    </ul>
-</section>
+        <p v-if="posts.length === 0" class="sin_resultado">No hay post publicados</p>
+
+        <ul class="posts__listado" :class="{ 'single-post': posts.length === 1 }">
+            <li
+                v-for="post in posts"
+                :key="post.id"
+                class="listado__post"
+                @click="openPost(post.id)"
+            >
+                <img :src="post.image" alt="" class="post__image">
+            </li>
+            <!-- Columna fantasma si solo hay un post -->
+            <li v-if="posts.length === 1" class="listado__post empty-post"></li>
+        </ul>
+    </section>
 </template>
 
 <script>
@@ -35,8 +39,16 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.titulo {
+    font-family: "DynaPuff", system-ui;
+    font-size: 2rem;
+}
+
 .perfil__posts {
     margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 }
 
 .posts__listado {
@@ -52,7 +64,12 @@ export default {
 
 .post__image {
     width: 100%;
-    aspect-ratio: 1 / 1; /* Hace que la imagen siempre sea cuadrada */
-    object-fit: cover; /* Ajusta la imagen para que se recorte y se vea bien */
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+}
+
+/* Columna fantasma para mantener dos columnas */
+.empty-post {
+    visibility: hidden;
 }
 </style>
