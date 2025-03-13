@@ -1,9 +1,10 @@
 <template>
+    <Spinner v-if="loadingPage" />
     <Form
         class="formulario"
         @submit="updateCatProfile"
         :validation-schema="schema"
-        v-if="cat"
+        v-else
     >
         <h1 class="formulario__titulo">Editar perfil</h1>
 
@@ -53,16 +54,15 @@
             <label for="en_adopcion">En adopción</label>
         </div>
 
+        <Spinner v-if="loadingChanges" />
+
         <div class="formulario__buttons">
             <button class="button__cancel button__max" @click="goBack">Cancelar</button>
             <button type="submit" class="button__confirm button__max">Aplicar cambios</button>
         </div>
 
-        <ul>
-            <li v-for="error in this.errorsServer" class="form__error">{{ error }}</li>
-        </ul>
+        <ErrorsList :errors-server="this.errorsServer" />
     </Form>
-    <p v-else>Cargando...</p>
 </template>
 
 <script>
@@ -70,11 +70,15 @@ import * as yup from 'yup';
 import { Form, Field, ErrorMessage } from "vee-validate";
 import api from "../helpers/api.js";
 import defaultImg from '../assets/default_img_profile.png';
+import ErrorsList from "../components/ErrorsList.vue";
+import Spinner from "../components/Spinner.vue";
 
 export default {
     name: "EditCatProfile",
 
     components: {
+        Spinner,
+        ErrorsList,
         Form,
         Field,
         ErrorMessage,
@@ -99,6 +103,8 @@ export default {
             }),
             newImage: null,
             defaultImage: defaultImg,
+            loadingPage: true,
+            loadingChanges: false,
         }
     },
 
@@ -127,9 +133,9 @@ export default {
 
         async updateCatProfile(values) {
             try {
+                this.loadingChanges = true;
                 const formData = new FormData();
 
-                // Comparar los valores del formulario con los datos del usuario
                 if (values.name && values.name !== this.cat.name) formData.append('name', values.name);
                 if (values.description && values.description !== this.cat.description) formData.append('description', values.description);
                 if (this.newImage) formData.append('image', this.newImage);
@@ -137,19 +143,21 @@ export default {
                     formData.append('en_adopcion', values.en_adopcion);
                 }
 
-                // Verificar si hay datos para enviar
                 if (!formData.has('name') && !formData.has('description') && !formData.has('image') && !formData.has('en_adopcion')) {
                     this.errorsServer = [...this.errorsServer, "No hay cambios para aplicar."];
+                    this.loadingChanges = false;
                     return;
                 }
 
                 const responseUpdateProfile = await api.post(`cats/${this.catId}`, formData);
 
                 if (responseUpdateProfile.status === 200) {
+                    this.loadingChanges = false;
                     this.$router.push(`/cat/${this.catId}`);
                 }
             } catch (error) {
                 this.errorsServer = [];
+                this.loadingChanges = false;
 
                 if (error.response.status === 422) {
                     if ('name' in error.response.data.errors) {
@@ -178,9 +186,11 @@ export default {
         }
     },
 
-    created() {
+    async created() {
         this.catId = this.$route.params.id;
-        this.getCatData();
+        await this.getCatData();
+
+        this.loadingPage = false;
     }
 }
 </script>

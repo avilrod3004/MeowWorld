@@ -4,7 +4,7 @@
         class="formulario"
         @submit="updateUserProfile"
         :validation-schema="schema"
-        v-if="user"
+        v-else
     >
         <h1 class="formulario__titulo">Editar perfil</h1>
 
@@ -138,6 +138,7 @@ export default {
                 // Verificar si hay datos para enviar
                 if (!formData.has('name') && !formData.has('username') && !formData.has('description') && !formData.has('img_profile')) {
                     this.errorsServer = [...this.errorsServer, "No hay cambios para aplicar."];
+                    this.loadingChanges = false;
                     return;
                 }
 
