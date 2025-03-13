@@ -31,7 +31,7 @@ const routes = [
             {
                 path: "/register",
                 name: "Register",
-                component: Register,
+                component: () => import("../pages/Register.vue"),
             }
         ]
     },
@@ -43,7 +43,7 @@ const routes = [
             {
                 path: '',
                 name: 'Home',
-                component: Home,
+                component: () => import("../pages/Home.vue"),
             }
         ]
     },
@@ -55,7 +55,7 @@ const routes = [
             {
                 path: '',
                 name: 'Search',
-                component: Search,
+                component: () => import("../pages/Search.vue"),
             }
         ]
     },
@@ -67,7 +67,7 @@ const routes = [
             {
                 path: '',
                 name: 'NewPost',
-                component: NewPost,
+                component: () => import("../pages/NewPost.vue"),
             }
         ]
     },
@@ -79,7 +79,7 @@ const routes = [
             {
                 path: '',
                 name: 'Chats',
-                component: Chats,
+                component: () => import("../pages/Chats.vue"),
             }
         ]
     },
@@ -91,7 +91,7 @@ const routes = [
             {
                 path: '',
                 name: 'Notifications',
-                component: Notifications,
+                component: () => import("../pages/Notifications.vue"),
             }
         ]
     },
@@ -103,7 +103,7 @@ const routes = [
             {
                 path: '',
                 name: 'UserProfile',
-                component: UserProfile,
+                component: () => import("../pages/UserProfile.vue"),
             }
         ]
     },
@@ -115,7 +115,7 @@ const routes = [
             {
                 path: '',
                 name: 'EditUserProfile',
-                component: EditUserProfile,
+                component: () => import("../pages/EditUserProfile.vue"),
             }
         ]
     },
@@ -127,7 +127,7 @@ const routes = [
             {
                 path: '',
                 name: 'NewCat',
-                component: NewCat,
+                component: () => import("../pages/NewCat.vue"),
             }
         ]
     },
@@ -139,7 +139,7 @@ const routes = [
             {
                 path: '',
                 name: 'CarId',
-                component: CatProfile,
+                component: () => import("../pages/CatProfile.vue"),
                 props: (route) => {
                     const { id } = route.params;
                     return {
@@ -193,13 +193,13 @@ const routes = [
             {
                 path: '',
                 name: 'Settings',
-                component: Settings,
+                component: () => import("../pages/Settings.vue"),
             }
         ]
     },
     {
         path: '/:pathMatch(.*)*',
-        component: NotFound,
+        component: () => import("../pages/NotFound.vue"),
     }
 ];
 
