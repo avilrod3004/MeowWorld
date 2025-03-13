@@ -4,6 +4,7 @@
         :validation-schema="schema"
         v-slot="{ values, errors, setFieldValue }"
         class="formulario"
+        :initial-values="{ gatos: [] }"
     >
         <h1 class="formulario__titulo">Nuevo post</h1>
 
@@ -41,19 +42,21 @@
         <div class="formulario__label-input">
             <label>¿Quién aparece en la foto?</label>
 
-            <Field name="gatos" v-slot="{ field, value }">
+            <Field name="gatos" v-slot="{ field }">
                 <div v-for="(cat, index) in cats" :key="index" class="form__checkbox">
                     <input
                         type="checkbox"
                         :id="'opcion' + index"
-                        :value="cat"
-                        :checked="value?.includes(cat)"
-                        @change="(e) => handleCheckboxChange(e, cat, setFieldValue)"
+                        :value="cat.id"
+                        :checked="field.value.includes(cat.id)"
+                        @change="handleCheckboxChange($event, cat.id, setFieldValue, values)"
                     />
-                    <label :for="'opcion' + index">{{ cat }}</label>
+                    <label :for="'opcion' + index">{{ cat.name }}</label>
                 </div>
             </Field>
         </div>
+
+
 
         <button type="submit" class="button__primary">Publicar</button>
 
@@ -84,7 +87,7 @@ export default {
             imagePreview: null,
             imageError: '',
             selectedImage: null,
-            cats: ["Misifú", "Pelusa", "Garfiel", "Bigotes"],
+            cats: null,
             schema: yup.object().shape({
                 descripcion: yup
                     .string()
@@ -98,6 +101,15 @@ export default {
     },
 
     methods: {
+        async getUserCats() {
+            try {
+                const responseCats = await api.get(`cats/user/2`)
+                this.cats = responseCats.data.data;
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
         handleImageChange(event) {
             const file = event.target.files[0];
             if (file) {
@@ -114,22 +126,31 @@ export default {
             }
         },
 
-        handleCheckboxChange(event, cat, setFieldValue) {
+        handleCheckboxChange(event, catId, setFieldValue, values) {
             const checked = event.target.checked;
-            let updatedCats = event.target.form.elements['gatos']?.value || [];
 
-            updatedCats = Array.isArray(updatedCats) ? updatedCats : [];
+            // Asegúrate de que values.gatos sea un array
+            let updatedCats = Array.isArray(values.gatos) ? [...values.gatos] : [];
 
             if (checked) {
-                updatedCats.push(cat);
+                if (!updatedCats.includes(catId)) {
+                    updatedCats.push(catId);
+                }
             } else {
-                updatedCats = updatedCats.filter((c) => c !== cat);
+                updatedCats = updatedCats.filter((id) => id !== catId);
             }
 
-            setFieldValue('gatos', updatedCats);
+            // Actualizar el valor del campo "gatos"
+            setFieldValue("gatos", updatedCats);
+
+            console.log("Gatos seleccionados:", updatedCats); // 🔍 Verifica los valores
         },
 
+
         async submitPost(values) {
+            console.log("Valores del formulario:", values); // <-- Revisa los valores completos
+            console.log("Gatos seleccionados:", values.gatos);
+
             if (!this.selectedImage) {
                 this.imageError = "Añade la imagen del post.";
                 return;
@@ -138,13 +159,27 @@ export default {
             const formData = new FormData();
             formData.append("image", this.selectedImage);
             formData.append("description", values.descripcion);
-            // formData.append("gatos", JSON.stringify( values.gatos === undefined ? [] :values.gatos));
-
 
             try {
-                const responseNewPost = await api.post( import.meta.env.VITE_BASE_API + "posts", formData);
+                const responseNewPost = await api.post( "posts", formData);
 
                 if (responseNewPost.status === 201) {
+                    const postId = responseNewPost.data.data.id;
+
+                    console.log(values.gatos); // --> undefined ??
+
+                    // Registrar la relacion entre el post y los gatos seleccionados
+                    if (values.gatos && values.gatos.length > 0) {
+                        await Promise.all(
+                            values.gatos.map(async (catId) => {
+                                await api.post('catpost', {
+                                    post_id: postId,
+                                    cat_id: catId,
+                                });
+                            })
+                        );
+                    }
+
                     this.$router.push('/profile');
                 }
             } catch (error) {
@@ -163,6 +198,10 @@ export default {
                 }
             }
         }
+    },
+
+    created() {
+        this.getUserCats()
     }
 };
 </script>
