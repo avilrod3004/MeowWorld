@@ -31,11 +31,11 @@
                 <Modal :is-open="showModalEditPassword">
                     <Form @submit="updatePassword" :validation-schema="schemaPassword">
                         <label for="password">Escribe la nueva contraseña:</label>
-                        <Field name="password" class="form__input" placeholder="Nueva contraseña"/>
+                        <Field type="password" name="password" class="form__input" placeholder="Nueva contraseña"/>
                         <ErrorMessage name="password" class="form__error" />
 
                         <label for="password_confirmation">Repite la nueva contraseña:</label>
-                        <Field name="password_confirmation" class="form__input" placeholder="Repite la constraseña"/>
+                        <Field type="password" name="password_confirmation" class="form__input" placeholder="Repite la constraseña"/>
                         <ErrorMessage name="password_confirmation" class="form__error" />
 
                         <div>
