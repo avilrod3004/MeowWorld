@@ -193,14 +193,15 @@ main::before {
     line-height: 5rem;
     font-weight: normal;
     font-style: normal;
-    font-size: 6rem;
+    font-size: 7rem;
     text-align: center;
 
     color: var(--primary-500);
-    background-color: var(--background-color);
     width: fit-content;
     border-radius: 2rem;
     padding: 0.5rem 1rem;
+    text-shadow: 4px 10px var(--primary-100);
+
 }
 
 .form__title {
