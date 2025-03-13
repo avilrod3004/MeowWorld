@@ -22,7 +22,7 @@
 </section>
 <p v-else>Cargando perfil...</p>
 
-<ListProfilePosts no-post-message="no hay fotos de este gato" :posts="[]"/>
+<ListProfilePosts v-if="posts" no-post-message="no hay fotos de este gato" :posts="posts"/>
 </template>
 
 <script>
@@ -50,6 +50,7 @@ export default {
     data() {
         return {
             cat: null,
+            posts: null,
             showModalDeleteCat: false,
         }
     },
@@ -59,6 +60,9 @@ export default {
             try {
                 const responseCatProfile = await api.get(`cats/${this.id}`);
                 this.cat = responseCatProfile.data.data
+
+                const responseCatPosts = await api.get(`catpost/cat/${this.id}`)
+                this.posts = responseCatPosts.data.data
             } catch (error) {
                 console.log(error);
             }
