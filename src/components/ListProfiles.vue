@@ -40,7 +40,6 @@ export default {
 
     props: {
         profiles: {
-            type: Array,
             required: true,
         },
         type: {
