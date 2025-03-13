@@ -21,7 +21,7 @@
         <p v-if="resultsCount">{{ resultsCount }} coincidencia<span v-if="resultsCount > 1">s</span></p>
 
         <ul v-if="users && users.length > 0">
-            <li v-for="user in users" :key="user.id">
+            <li v-for="user in users" :key="user.id" @click="gotToUserProfile(user.id)" class="item">
                 <img :src="user.img_profile" alt="">
                 <p>{{ user.name }}</p>
                 <p>{{ user.username }}</p>
@@ -30,7 +30,7 @@
         <p v-if="users && users.length === 0">No hay usuarios que tengan ese nombre</p>
 
         <ul v-if="cats && cats.length > 0">
-            <li v-for="cat in cats" :key="cat.id">
+            <li v-for="cat in cats" :key="cat.id" @click="goToCatProfile(cat.id)" class="item">
                 <img :src="cat.image" alt="">
                 <p>{{ cat.name }}</p>
                 <p>{{ cat.owner.username }}</p>
@@ -111,7 +111,17 @@ export default {
                 console.log("Error en la búsqueda:", error);
                 this.errors.push("Hubo un error al realizar la búsqueda.");
             }
-        }    }
+        },
+
+        goToCatProfile(catId) {
+            this.$router.push({ path: `/cat/${catId}` });
+        },
+
+        gotToUserProfile(userId) {
+            this.$router.push({ path: `/user/${userId}` });
+        }
+    }
+
 }
 </script>
 
@@ -123,5 +133,9 @@ export default {
 
     border-bottom: 0.1rem solid #ccc;
     padding: 1rem 0
+}
+
+.item {
+    cursor: pointer;
 }
 </style>
