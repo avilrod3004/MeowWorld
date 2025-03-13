@@ -21,9 +21,7 @@
 
             <button type="submit" class="button__primary">Acceder</button>
 
-            <ul>
-                <li v-for="error in errors" class="form__error">{{ error }}</li>
-            </ul>
+            <ErrorsList :errorsServer="errors"/>
 
             <p class="form__link">
                 ¿No tienes cuenta? <a href="/register" class="link">Regístrate aquí</a>
@@ -40,9 +38,11 @@ import {Form, Field, ErrorMessage} from "vee-validate";
 import {useUserStore} from "../stores/userStore.js";
 import {useAuthStore} from "../stores/authStore.js";
 import {mapState} from "pinia";
+import ErrorsList from "../components/ErrorsList.vue";
 
 export default {
     components: {
+        ErrorsList,
         Form,
         Field,
         ErrorMessage,
@@ -85,6 +85,11 @@ export default {
                 }
             } catch (error) {
                 this.errors = [];
+
+                if (!error.response) {
+                    this.errors = ["El servidor no se encuentra disponible. Vuelva a intentarlo en unos minutos."]
+                    return
+                }
 
                 if (error.response.status === 422) {
                     if ('email' in error.response.data.errors) {
