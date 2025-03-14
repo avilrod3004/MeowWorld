@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { useAuthStore } from "../stores/authStore.js";
 
 const api = axios.create({
     baseURL: import.meta.env.VITE_BASE_API,
@@ -8,7 +7,6 @@ const api = axios.create({
 // Interceptor para incluir el token en cada petición
 api.interceptors.request.use(config => {
     const token = localStorage.getItem('token');
-    // const token = useAuthStore().getToken.token;
 
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;

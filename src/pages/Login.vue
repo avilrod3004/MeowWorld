@@ -36,7 +36,6 @@ import axios from 'axios';
 import * as yup from 'yup';
 import {Form, Field, ErrorMessage} from "vee-validate";
 import {useUserStore} from "../stores/userStore.js";
-import {useAuthStore} from "../stores/authStore.js";
 import {mapState} from "pinia";
 import ErrorsList from "../components/ErrorsList.vue";
 
@@ -68,7 +67,6 @@ export default {
 
     computed: {
         ...mapState(useUserStore, ["user"]),
-        ...mapState(useAuthStore, ["token"]),
     },
 
     methods: {
@@ -78,7 +76,6 @@ export default {
 
                 if (response.data.access_token) {
                     localStorage.setItem('token', response.data.access_token);
-                    // useAuthStore().setToken(response.data.access_token);
                     useUserStore().setUser(response.data.data);
 
                     this.$router.push('/home');
