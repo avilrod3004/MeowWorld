@@ -5,7 +5,7 @@
         :created_at="this.post.created_at"
         :username="this.post.author.username"
         :name="this.post.author.name"
-        :img_profile="this.post.author.img_profile"
+        :img_profile="this.post.author?.img_profile || defaultImage"
     />
 
     <img :src="this.post.image" alt="" class="post__image">
@@ -95,6 +95,7 @@ import Modal from "../modals/Modal.vue";
 import * as yup from 'yup';
 import {Form, Field, ErrorMessage} from "vee-validate";
 import {useUserStore} from "../stores/userStore.js";
+import defaultImg from '../assets/default_img_profile.png';
 
 library.add(faHeart, fasHeart, faComment);
 
@@ -132,6 +133,7 @@ export default {
             }),
             errorsServer: null,
             authUserId: null,
+            defaultImage: defaultImg,
         }
     },
 

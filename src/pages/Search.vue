@@ -25,7 +25,7 @@
             <div v-else class="resultados__listados">
                 <p v-if="resultsCount">{{ resultsCount }} coincidencia<span v-if="resultsCount > 1">s</span></p>
 
-                <ListProfiles :profiles="this.profiles" :type="this.type" />
+                <ListProfiles v-if="resultsCount" :profiles="this.profiles" :type="this.type" />
             </div>
         </section>
     </div>

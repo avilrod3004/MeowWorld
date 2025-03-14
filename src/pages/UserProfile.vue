@@ -1,6 +1,6 @@
 <template>
     <Spinner v-if="loading"/>
-    <div v-else>
+    <div v-else class="contenedor">
         <section class="perfil">
             <ProfileData
                 :id="this.user.id"
@@ -118,6 +118,10 @@ export default {
 </script>
 
 <style scoped>
+.contenedor {
+    width: 100%;
+}
+
 .perfil {
     display: flex;
     flex-direction: column;
