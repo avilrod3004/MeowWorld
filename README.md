@@ -45,4 +45,7 @@ npm run build
 ---
 
 ## Enlace despliegue
-aaaa
+Frontend desplegado en Netlify -> [enlace](https://meow-world-rs.netlify.app/)
+
+> [!tip]
+> Para una mejor experiencia de usuario, usa la aplicación desde una pantalla de móvil.
