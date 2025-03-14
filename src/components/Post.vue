@@ -12,10 +12,10 @@
 
     <p>{{ this.post.description }}</p>
 
-    <div v-if="allInfo">
-        <p>Gatos:</p>
-        <ul>
-            <li>Misufú</li>
+    <div v-if="allInfo && cats && cats.length > 0" class="cats">
+        <p class="cats__titulo">¿Quién aparece en la foto?</p>
+        <ul class="cats__list">
+            <li v-for="cat in cats">{{ cat.name }}</li>
         </ul>
     </div>
 
@@ -52,7 +52,7 @@
             </router-link>
         </li>
 
-        <li v-if="allInfo" @click="openModalEditPost">Editar</li>
+        <li v-if="allInfo" @click="openModalEditPost" class="link">Editar</li>
         <Modal :is-open="showModalEditPost" v-slot="{ values }">
             <Form @submit="editPost" :validation-schema="schema">
                 <label for="description">Cambiar la descripción del post:</label>
@@ -69,7 +69,7 @@
             </Form>
         </Modal>
 
-        <li v-if="allInfo" @click="showModalDeletePost = true">Borrar</li>
+        <li v-if="allInfo" @click="showModalDeletePost = true" class="link">Borrar</li>
         <Modal :is-open="showModalDeletePost">
             <p>¿Quiere eliminar este post?</p>
             <button @click="showModalDeletePost = false">Cancelar</button>
@@ -109,6 +109,7 @@ export default {
             liked: null,
             numLikes: null,
             numComments: null,
+            cats: null,
             showModalEditPost: false,
             currentDescription: "",
             showModalDeletePost: false,
@@ -118,7 +119,8 @@ export default {
                     .trim()
                     .required("Añade una descripción de la imagen del post.")
                     .max(2000, "La descripción debe tener una longitud máxima de 2000 caracteres"),
-            })
+            }),
+            errorsServer: null,
         }
     },
 
@@ -145,16 +147,21 @@ export default {
                 }
             }
             catch(error) {
-                console.log(error);
+                this.errorsServer = null;
+                this.errorsServer = error.response?.data.errors || ["Ha ocurrido un error al cargar los datos del post. Vuelva a intentarlo más tarde."];
             }
         },
 
         async getNumLikes() {
             try {
                 const reponseNumLike = await api.get(`likes/post/${this.post.id}`);
-                this.numLikes = reponseNumLike.data.likes;
+
+                if (reponseNumLike.status === 200) {
+                    this.numLikes = reponseNumLike.data.likes;
+                }
             } catch (error) {
-                console.log(error);
+                this.errorsServer = null;
+                this.errorsServer = error.response?.data.errors || ["Ha ocurrido un error al cargar los datos del post. Vuelva a intentarlo más tarde."];
             }
         },
 
@@ -164,16 +171,24 @@ export default {
             if (this.liked) {
                 try {
                     const responseLike = await api.post(`likes`, {"post_id": this.post.id});
-                    await this.getNumLikes();
+
+                    if (responseLike.status === 200) {
+                        await this.getNumLikes();
+                    }
                 } catch (error) {
-                    console.log(error);
+                    this.errorsServer = null;
+                    this.errorsServer = error.response?.data.errors || ["Ha ocurrido un error al actualizar el post. Vuelva a intentarlo más tarde."];
                 }
             } else {
                 try {
                     const responseLike = await api.delete(`likes/${this.post.id}`);
-                    await this.getNumLikes();
+
+                    if (responseLike.status === 200) {
+                        await this.getNumLikes();
+                    }
                 } catch (error) {
-                    console.log(error);
+                    this.errorsServer = null;
+                    this.errorsServer = error.response?.data.errors || ["Ha ocurrido un error al actualizar el post. Vuelva a intentarlo más tarde."];
                 }
             }
         },
@@ -181,9 +196,13 @@ export default {
         async getNumComments() {
             try {
                 const responseComments = await api.get(`/comments/post/${this.post.id}`);
-                this.numComments = responseComments.data.meta.total;
+
+                if (responseComments.status === 200) {
+                    this.numComments = responseComments.data.meta.total;
+                }
             } catch (error) {
-                console.log(error);
+                this.errorsServer = null;
+                this.errorsServer = error.response?.data.errors || ["Ha ocurrido un error al cargar los datos del post. Vuelva a intentarlo más tarde."];
             }
         },
 
@@ -195,7 +214,21 @@ export default {
                     this.$router.push('/profile')
                 }
             } catch (error) {
-                console.log(error);
+                this.errorsServer = null;
+                this.errorsServer = error.response?.data.errors || ["Ha ocurrido un error al borrar del post. Vuelva a intentarlo más tarde."];
+            }
+        },
+
+        async getCatsPost() {
+            try {
+                const responseGetCats = await api.get(`catpost/post/${this.post.id}`)
+
+                if (responseGetCats.status === 200) {
+                    this.cats = responseGetCats.data.data
+                }
+            } catch (error) {
+                this.errorsServer = null;
+                this.errorsServer = error.response?.data.errors || ["Ha ocurrido un error al cargar los datos del post. Vuelva a intentarlo más tarde."];
             }
         },
 
@@ -217,7 +250,8 @@ export default {
                     this.$router.push('/profile')
                 }
             } catch (error) {
-                console.log(error);
+                this.errorsServer = null;
+                this.errorsServer = error.response?.data.errors || ["Ha ocurrido un error al actualizar del post. Vuelva a intentarlo más tarde."];
             }
         }
     },
@@ -226,6 +260,7 @@ export default {
         this.isLiked();
         this.getNumLikes();
         this.getNumComments();
+        this.getCatsPost();
     }
 }
 </script>
@@ -256,6 +291,23 @@ export default {
     display: flex;
     align-items: center;
     gap: 0.25rem;
+}
+
+.cats {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.cats__titulo {
+    font-weight: bold;
+}
+
+.cats__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding-left: 0.5rem;
 }
 
 </style>

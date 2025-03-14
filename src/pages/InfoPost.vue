@@ -1,36 +1,39 @@
 <template>
-<div v-if="post && comments">
-    <Post :post="this.post" :all-info="true"/>
-    <section>
-        <h1>Comentarios</h1>
+    <Spinner v-if="loading" />
+    <div v-else>
+        <div v-if="post && comments">
+            <Post :post="this.post" :all-info="true"/>
+            <section>
+                <h1 class="titulo">Comentarios</h1>
 
-        <Form
-            @submit="submitComment"
-            :validation-schema="schema"
-            v-slot="{ resetForm }"
-        >
-            <Field name="commentText" v-slot="{ field }">
-                <textarea
-                    id="commentText"
-                    class="form__input form__textarea"
-                    v-bind="field"
-                    placeholder="Añade un comentario..."
-                ></textarea>
-            </Field>
-            <ErrorMessage name="commentText" class="error" />
+                <Form
+                    @submit="submitComment"
+                    :validation-schema="schema"
+                    v-slot="{ resetForm }"
+                    class="formulario"
+                >
+                    <Field name="commentText" v-slot="{ field }">
+                    <textarea
+                        id="commentText"
+                        class="form__input form__textarea"
+                        v-bind="field"
+                        placeholder="Añade un comentario..."
+                    ></textarea>
+                    </Field>
+                    <ErrorMessage name="commentText" class="error" />
 
-            <button type="submit" class="button__primary">Publicar</button>
+                    <Spinner v-if="loadingComment" />
 
-<!--            <ul>-->
-<!--                <li v-for="error in this.errorsServer" class="form__error">{{ error }}</li>-->
-<!--            </ul>-->
-        </Form>
+                    <button type="submit" class="button__primary">Publicar</button>
 
-        <Comment v-for="comment in this.comments" :comment="comment"/>
-    </section>
-</div>
-<p v-else>Cargando...</p>
+                    <ErrorsList :errors-server="this.errorsServer" />
+                </Form>
 
+                <Comment v-for="comment in this.comments" :comment="comment"/>
+            </section>
+        </div>
+        <ErrorsList v-else :errors-server="this.errorsServer" />
+    </div>
 </template>
 
 <script>
@@ -39,10 +42,12 @@ import Comment from "../components/Comment.vue";
 import api from "../helpers/api.js";
 import * as yup from 'yup';
 import { Form, Field, ErrorMessage } from "vee-validate";
+import Spinner from "../components/Spinner.vue";
+import ErrorsList from "../components/ErrorsList.vue";
 
 export default {
     name: "InfoPost",
-    components: {ErrorMessage, Field, Post, Comment, Form},
+    components: {ErrorsList, Spinner, ErrorMessage, Field, Post, Comment, Form},
 
     data() {
         return {
@@ -55,7 +60,10 @@ export default {
                     .trim()
                     .required("Añade un comentario")
                     .max(255, "La longitud máxima del comentario es de 255 caracteres.")
-            })
+            }),
+            loading: true,
+            loadingComment: false,
+            errorsServer: null,
         }
     },
 
@@ -63,17 +71,24 @@ export default {
         async getPostData() {
             try {
                 const responsePost = await api.get(`/posts/${this.$route.params.id}`);
-                this.post = responsePost.data.data;
+                if (responsePost.status === 200) {
+                    this.post = responsePost.data.data;
+                }
 
                 const responseComments = await api.get(`/comments/post/${this.postId}`);
-                this.comments = responseComments.data.data;
+
+                if (responseComments.status === 200) {
+                    this.comments = responseComments.data.data;
+                }
             } catch (error) {
-                console.log(error);
+                this.errorsServer = []
+                this.errorsServer = error.response?.data.errors || ["Ha ocurrido un error inesperado al cargar el post. Vuelva a interntarlo más tarde."];
             }
         },
 
         async submitComment(values, { resetForm }) {
             try {
+                this.loadingComment = true;
                 const responseComment = await api.post(`/comments`,
                     {
                         "post_id": this.postId,
@@ -83,22 +98,51 @@ export default {
 
                 if (responseComment.status === 201) {
                     await this.getPostData();
+                    this.loadingComment = false;
                     resetForm();
                 }
             } catch (error) {
-                console.log(error);
+                this.errorsServer = []
+                this.loadingComment = false;
+
+                if (error.response.status === 422) {
+                    if ('post_id' in error.response.data.errors) {
+                        this.errors = [...this.errors, ...error.response.data.errors.email];
+                    }
+
+                    if ('text' in error.response.data.errors) {
+                        this.errors = [...this.errors, ...error.response.data.errors.password];
+                    }
+                } else {
+                    this.errorsServer = error.response?.data.errors || ["Ha ocurrido un error inesperado al cargar el post. Vuelva a interntarlo más tarde."];
+                }
             }
         },
     },
 
-    created() {
+    async created() {
         this.postId = this.$route.params.id;
 
-        this.getPostData();
+        await this.getPostData();
+        this.loading = false;
     }
 }
 </script>
 
 <style scoped>
+.titulo {
+    font-family: "DynaPuff", system-ui;
+    font-size: 2rem;
 
+    padding: 1rem 0;
+}
+
+.formulario {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    border-bottom: 0.1rem solid #ccc;
+    padding: 1rem 0
+}
 </style>
