@@ -8,7 +8,7 @@
                 :description="this.user.description"
                 :username="this.user.username"
                 :name="this.user.name"
-                :img-profile="this.user.img_profile"
+                :img-profile="this.user?.img_profile || this.defaultImage"
             />
 
             <ul class="perfil__estadistica" v-if="numFollowing !== null && numFollowers !== null">
@@ -38,6 +38,8 @@ import ListProfilePosts from "../components/ListProfilePosts.vue";
 import ListCatsProfile from "../components/ListCatsProfile.vue";
 import Spinner from "../components/Spinner.vue";
 import ErrorsList from "../components/ErrorsList.vue";
+import defaultImg from '../assets/default_img_profile.png';
+
 
 export default {
     name: 'Profile',
@@ -52,6 +54,7 @@ export default {
             numFollowers: null,
             numFollowing: null,
             errorsServer: null,
+            defaultImage: defaultImg,
         };
     },
 

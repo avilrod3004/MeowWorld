@@ -1,5 +1,5 @@
 <template>
-    <nav class="footer__navegacion">
+    <nav class="aside__navegacion">
         <ul class="navegacion__listado">
             <li class="listado__opcion">
                 <router-link to="/home" class="opcion__enlace">
@@ -56,6 +56,12 @@ export default {
 </script>
 
 <style scoped>
+.aside__navegacion {
+    padding: 1rem;
+    margin-right: 1rem;
+    border-right: 0.1rem solid #ccc;
+}
+
 .navegacion__listado {
     display: flex;
     flex-direction: column;
