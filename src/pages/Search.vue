@@ -1,32 +1,34 @@
 <template>
-    <h1 class="titulo">Búsqueda</h1>
+    <div class="contenido">
+        <h1 class="titulo">Búsqueda</h1>
 
-    <Form @submit="searchQuery" :validation-schema="schema" class="formulario">
-        <Field aria-label="Tipo de cuenta" as="select" name="category" class="form__input" :v-model="selectedCategory">
-            <option value="" disabled selected>Categoría</option>
-            <option value="users">Usuarios</option>
-            <option value="cats">Gatos</option>
-        </Field>
-        <ErrorMessage name="category" class="form__error"/>
+        <Form @submit="searchQuery" :validation-schema="schema" class="formulario">
+            <Field aria-label="Tipo de cuenta" as="select" name="category" class="form__input" :v-model="selectedCategory">
+                <option value="" disabled selected>Categoría</option>
+                <option value="users">Usuarios</option>
+                <option value="cats">Gatos</option>
+            </Field>
+            <ErrorMessage name="category" class="form__error"/>
 
-        <Field aria-label="Palabra clave" name="query" class="form__input" placeholder="Palabra clave" />
-        <ErrorMessage name="email" class="form__error"/>
+            <Field aria-label="Palabra clave" name="query" class="form__input" placeholder="Palabra clave" />
+            <ErrorMessage name="email" class="form__error"/>
 
-        <button type="submit" class="button__primary">Aplicar</button>
+            <button type="submit" class="button__primary">Aplicar</button>
 
-        <ErrorsList :errors-server="errors" />
-    </Form>
+            <ErrorsList :errors-server="errors" />
+        </Form>
 
-    <section class="resultados">
-        <h1 class="titulo">Resultados</h1>
+        <section class="resultados">
+            <h1 class="titulo">Resultados</h1>
 
-        <Spinner v-if="loading"/>
-        <div v-else class="resultados__listados">
-            <p v-if="resultsCount">{{ resultsCount }} coincidencia<span v-if="resultsCount > 1">s</span></p>
+            <Spinner v-if="loading"/>
+            <div v-else class="resultados__listados">
+                <p v-if="resultsCount">{{ resultsCount }} coincidencia<span v-if="resultsCount > 1">s</span></p>
 
-            <ListProfiles :profiles="this.profiles" :type="this.type" />
-        </div>
-    </section>
+                <ListProfiles :profiles="this.profiles" :type="this.type" />
+            </div>
+        </section>
+    </div>
 </template>
 
 <script>
@@ -111,6 +113,11 @@ export default {
 </script>
 
 <style scoped>
+.contenido {
+    display: flex;
+    flex-direction: column;
+}
+
 .titulo {
     font-family: "DynaPuff", system-ui;
     font-size: 2rem;

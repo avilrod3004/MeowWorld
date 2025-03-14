@@ -50,5 +50,6 @@ export default {
     gap: 1rem;
 
     width: 22rem;
+    z-index: 20;
 }
 </style>

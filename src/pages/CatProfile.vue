@@ -1,35 +1,37 @@
 <template>
+<div>
     <Spinner v-if="loading"/>
     <section v-else class="perfil">
-    <ProfileData
-        :id="this.cat.id"
-        type="cat"
-        :description="this.cat.description"
-        :username="this.cat.owner.username"
-        :name="this.cat.name"
-        :img-profile="this.cat?.image || defaultImage"
-    />
+        <ProfileData
+            :id="this.cat.id"
+            type="cat"
+            :description="this.cat.description"
+            :username="this.cat.owner.username"
+            :name="this.cat.name"
+            :img-profile="this.cat?.image || defaultImage"
+        />
 
-    <span v-if="this.cat.en_adopcion" class="perfil__adopt"><font-awesome-icon icon="paw" class="icono icono-adopt"/> En adopción</span>
+        <span v-if="this.cat.en_adopcion" class="perfil__adopt"><font-awesome-icon icon="paw" class="icono icono-adopt"/> En adopción</span>
 
-    <div v-if="this.catOwner && this.authUserId && (this.catOwner === this.authUserId)" class="buttons">
-        <button class="button__secondary editar-perfil" @click="updateCatProfile">Editar perfil</button>
-        <button class="button__secondary editar-perfil" @click="showModalDeleteCat = true">Eliminar gato</button>
+        <div v-if="this.catOwner && this.authUserId && (this.catOwner === this.authUserId)" class="buttons">
+            <button class="button__secondary editar-perfil" @click="updateCatProfile">Editar perfil</button>
+            <button class="button__secondary editar-perfil" @click="showModalDeleteCat = true">Eliminar gato</button>
 
-        <ErrorsList :errors-server="errorsServer"/>
-    </div>
-
-    <Modal :is-open="showModalDeleteCat">
-        <p class="pregunta">¿Quiere eliminar el perfil de este gato?</p>
-        <p>Las fotos en las que aparece no serán eliminadas</p>
-        <div class="modal__buttons">
-            <button class="button__cancel" @click="showModalDeleteCat = false">Cancelar</button>
-            <button class="button__confirm" @click="deleteCatProfile">Eliminar</button>
+            <ErrorsList :errors-server="errorsServer"/>
         </div>
-    </Modal>
-</section>
 
-<ListProfilePosts v-if="posts" :posts="posts"/>
+        <Modal :is-open="showModalDeleteCat">
+            <p class="pregunta">¿Quiere eliminar el perfil de este gato?</p>
+            <p>Las fotos en las que aparece no serán eliminadas</p>
+            <div class="modal__buttons">
+                <button class="button__cancel" @click="showModalDeleteCat = false">Cancelar</button>
+                <button class="button__confirm" @click="deleteCatProfile">Eliminar</button>
+            </div>
+        </Modal>
+    </section>
+
+    <ListProfilePosts v-if="posts" :posts="posts"/>
+</div>
 </template>
 
 <script>

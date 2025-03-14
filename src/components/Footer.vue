@@ -39,6 +39,12 @@ export default {
     z-index: 10;
 }
 
+@media (min-width: 600px) {
+    footer {
+        display: none;
+    }
+}
+
 .navegacion__listado {
     display: flex;
     justify-content: space-between;
