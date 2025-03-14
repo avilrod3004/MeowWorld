@@ -11,12 +11,12 @@
                 </li>
 
                 <Modal :is-open="showModalEditEmail">
-                    <Form @submit="updateEmail" :validation-schema="schemaEmail">
+                    <Form @submit="updateEmail" :validation-schema="schemaEmail" class="modal__formulario">
                         <label for="email">Escribe el nuevo email:</label>
                         <Field name="email" class="form__input" placeholder="Nuevo email"/>
                         <ErrorMessage name="email" class="form__error" />
 
-                        <div>
+                        <div class="modal__buttons">
                             <button class="button__cancel" @click="showModalEditEmail = false">Cancelar</button>
                             <button class="button__confirm" type="submit">Actualizar</button>
                         </div>
@@ -29,7 +29,7 @@
                 </li>
 
                 <Modal :is-open="showModalEditPassword">
-                    <Form @submit="updatePassword" :validation-schema="schemaPassword">
+                    <Form @submit="updatePassword" :validation-schema="schemaPassword" class="modal__formulario">
                         <label for="password">Escribe la nueva contraseña:</label>
                         <Field type="password" name="password" class="form__input" placeholder="Nueva contraseña"/>
                         <ErrorMessage name="password" class="form__error" />
@@ -38,7 +38,7 @@
                         <Field type="password" name="password_confirmation" class="form__input" placeholder="Repite la constraseña"/>
                         <ErrorMessage name="password_confirmation" class="form__error" />
 
-                        <div>
+                        <div class="modal__buttons">
                             <button class="button__cancel" @click="showModalEditPassword = false">Cancelar</button>
                             <button class="button__confirm" type="submit">Actualizar</button>
                         </div>

@@ -54,8 +54,8 @@
 
         <li v-if="allInfo" @click="openModalEditPost" class="link">Editar</li>
         <Modal :is-open="showModalEditPost" v-slot="{ values }">
-            <Form @submit="editPost" :validation-schema="schema">
-                <label for="description">Cambiar la descripción del post:</label>
+            <Form @submit="editPost" :validation-schema="schema" class="modal__formulario">
+                <label for="description" class="formulario__label-input">Cambiar la descripción del post:</label>
                 <Field
                     name="description"
                     class="form__input"
@@ -64,16 +64,20 @@
                 />
                 <ErrorMessage name="description" class="form__error"/>
 
-                <button @click="showModalEditPost = false">Cancelar</button>
-                <button type="submit">Actualizar post</button>
+                <div class="modal__buttons">
+                    <button class="button__cancel" @click="showModalEditPost = false">Cancelar</button>
+                    <button class="button__confirm" type="submit">Actualizar</button>
+                </div>
             </Form>
         </Modal>
 
         <li v-if="allInfo" @click="showModalDeletePost = true" class="link">Borrar</li>
         <Modal :is-open="showModalDeletePost">
-            <p>¿Quiere eliminar este post?</p>
-            <button @click="showModalDeletePost = false">Cancelar</button>
-            <button @click="deletePost">Borrar post</button>
+            <p class="pregunta">¿Quiere eliminar este post?</p>
+            <div class="modal__buttons">
+                <button class="button__cancel" @click="showModalDeletePost = false">Cancelar</button>
+                <button class="button__confirm" @click="deletePost">Borrar post</button>
+            </div>
         </Modal>
     </ul>
 </article>

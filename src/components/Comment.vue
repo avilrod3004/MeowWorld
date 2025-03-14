@@ -4,9 +4,11 @@
             <img :src="this.comment.user?.img_profile || this.defaultImage" alt="" class="img__profile">
             <p class="link" v-if="this.authorId === this.authUserId" @click="showModalDeleteComment = true">Borrar</p>
             <Modal :is-open="showModalDeleteComment">
-                <p>¿Quiere eliminar este comentario?</p>
-                <button @click="showModalDeleteComment = false">Cancelar</button>
-                <button @click="deleteComment">Borrar comentario</button>
+                <p class="pregunta">¿Quiere eliminar este comentario?</p>
+                <div class="modal__buttons">
+                    <button class="button__cancel" @click="showModalDeleteComment = false">Cancelar</button>
+                    <button class="button__confirm" @click="deleteComment">Borrar</button>
+                </div>
             </Modal>
         </div>
 

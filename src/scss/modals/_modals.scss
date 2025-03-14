@@ -1,0 +1,17 @@
+.pregunta {
+    font-weight: bold;
+    text-align: center;
+}
+
+.modal__formulario {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 0.5rem;
+}
+
+.modal__buttons {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}

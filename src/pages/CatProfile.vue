@@ -20,10 +20,12 @@
     </div>
 
     <Modal :is-open="showModalDeleteCat">
-        <p>¿Quiere eliminar el perfil de este gato?</p>
+        <p class="pregunta">¿Quiere eliminar el perfil de este gato?</p>
         <p>Las fotos en las que aparece no serán eliminadas</p>
-        <button @click="showModalDeleteCat = false">Cancelar</button>
-        <button @click="deleteCatProfile">Eliminar perfil</button>
+        <div class="modal__buttons">
+            <button class="button__cancel" @click="showModalDeleteCat = false">Cancelar</button>
+            <button class="button__confirm" @click="deleteCatProfile">Eliminar</button>
+        </div>
     </Modal>
 </section>
 
