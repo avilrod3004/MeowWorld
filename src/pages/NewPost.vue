@@ -71,6 +71,8 @@ import { Form, Field, ErrorMessage } from "vee-validate";
 import api from "../helpers/api.js";
 import ErrorsList from "../components/ErrorsList.vue";
 import Spinner from "../components/Spinner.vue";
+import {useUserStore} from "../stores/userStore.js";
+
 
 /**
  * Componente para crear un nuevo post con una imagen y una descripción.
@@ -106,6 +108,7 @@ export default {
             errorsServer: [],
             loadingPage: true,
             loadingPost: false,
+            userId: null,
         };
     },
 
@@ -115,7 +118,7 @@ export default {
          */
         async getUserCats() {
             try {
-                const responseCats = await api.get(`cats/user/2`)
+                const responseCats = await api.get(`cats/user/${this.userId}`)
                 this.cats = responseCats.data.data;
             } catch (error) {
                 console.log(error);
@@ -219,8 +222,9 @@ export default {
     },
 
     async created() {
-        await this.getUserCats()
         this.loadingPage = false;
+        this.userId = useUserStore().getUser.id;
+        await this.getUserCats()
     }
 };
 </script>
