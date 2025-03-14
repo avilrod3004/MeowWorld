@@ -13,6 +13,10 @@
 </template>
 
 <script>
+/**
+ * Componente que muestra los datos del perfil de un usuario o gato, incluyendo su nombre,
+ * nombre de usuario, descripción e imagen de perfil.
+ */
 export default {
     name: "ProfileData",
 

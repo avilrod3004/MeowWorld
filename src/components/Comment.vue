@@ -54,15 +54,22 @@ export default {
     },
 
     methods: {
+        /**
+         * Formatea la fecha de creación del comentario.
+         */
         formatData,
 
+        /**
+         * Elimina el comentario.
+         * Llama a la API para eliminar el comentario y navega a la página anterior.
+         */
         async deleteComment() {
             try {
                 const responseDeleteComment = await api.delete(`/comments/${this.comment.id}`);
                 console.log(this.comment.post.id);
 
                 if (responseDeleteComment.status === 200) {
-                    this.$router.back() // :(
+                    this.$router.back()
                 }
 
             } catch (error) {

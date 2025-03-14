@@ -41,7 +41,11 @@ import ListCatsProfile from "../components/ListCatsProfile.vue";
 import defaultImg from '../assets/default_img_profile.png';
 import {useUserStore} from "../stores/userStore.js";
 
-
+/**
+ * Componente que muestra el perfil de un usuario, incluyendo su información personal, estadísticas de seguidores y seguidos, gatos asociados y sus publicaciones.
+ *
+ * Permite seguir o dejar de seguir al usuario desde su perfil.
+ */
 export default {
     name: 'Profile',
     components: {ListCatsProfile, ListProfilePosts, ProfileData},
@@ -61,6 +65,10 @@ export default {
     },
 
     methods: {
+        /**
+         * Metodo para obtener los datos del usuario, incluyendo su perfil, gatos, seguidores, seguidos y publicaciones.
+         * Realiza múltiples solicitudes a la API para obtener toda la información.
+         */
         async getUserData() {
             try {
                 // Datos del perfil del usuario
@@ -91,6 +99,10 @@ export default {
             }
         },
 
+        /**
+         * Metodo para seguir al usuario desde el perfil.
+         * Realiza una solicitud POST a la API para registrar el seguimiento.
+         */
         async followUser() {
             try {
                 const responseFollow = await api.post(`follows`, { "followed_id": this.userId });
@@ -103,6 +115,10 @@ export default {
             }
         },
 
+        /**
+         * Metodo para dejar de seguir al usuario desde el perfil.
+         * Realiza una solicitud DELETE a la API para eliminar el seguimiento.
+         */
         async unFollowUser() {
             try {
                 const responseFollow = await api.delete(`follows/unfollow/${this.userId}`);

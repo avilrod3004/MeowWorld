@@ -22,6 +22,10 @@ export default {
     },
 
     methods: {
+        /**
+         * Redirige a la página del perfil del gato al hacer clic en su imagen.
+         * Utiliza el ID del gato para hacer la navegación.
+         */
         gotToCatProfile(catId) {
             this.$router.push({ name: "CatId", params: { id: catId } });
         },

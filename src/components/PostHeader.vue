@@ -1,11 +1,11 @@
 <template>
 <div class="post__user">
-    <img :src="this.img_profile" alt="devolver imagen desde la api!!" class="user__image">
+    <img :src="this.img_profile" alt="" class="user__image">
 
     <div class="user__data">
         <div class="data__names">
             <p class="names__name">{{ this.name }}</p>
-            <p class="names__username" @click="visitUserProfile">@{{ this.username }}</p>
+            <p class="names__username link" @click="gotToUserProfile">@{{ this.username }}</p>
         </div>
         <p class="data__date">{{ formatData(this.created_at) }}</p>
     </div>
@@ -14,21 +14,19 @@
 
 <script>
 import formatData from "../helpers/formatData.js";
-import axios from "axios";
+import {useUserStore} from "../stores/userStore.js";
 
 export default {
     name: "PostPreviewHeader",
     methods: {
         formatData,
 
-        async visitUserProfile() {
-            // try {
-            //     // const responseUserProfile = await axios.get(`users/${this.id}`, {})
-            //
-            // } catch (error) {
-            //     console.error(error);
-            // }
-            // this.$router.push(`/cat/${catId}`);
+        gotToUserProfile() {
+            if (useUserStore().getUser.id === this.id) {
+                this.$router.push("/profile");
+            } else {
+                this.$router.push({ name: 'OtherUserProfile', params: { id: this.id } });
+            }
         }
     },
 

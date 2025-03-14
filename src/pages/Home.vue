@@ -17,6 +17,12 @@ import api from "../helpers/api.js";
 import ErrorsList from "../components/ErrorsList.vue";
 import Spinner from "../components/Spinner.vue";
 
+/**
+ * Componente Home
+ *
+ * Muestra los últimos posts disponibles en la aplicación.
+ * Si no hay publicaciones, muestra un mensaje informativo.
+ */
 export default {
     name: "Home",
     components: {Spinner, ErrorsList, Post},
@@ -30,6 +36,9 @@ export default {
     },
 
     methods: {
+        /**
+         * Obtiene las publicaciones más recientes de la API.
+         */
         async getLastPosts() {
             try {
                 const responsePosts = await api.get('posts')

@@ -7,6 +7,10 @@
 </template>
 
 <script>
+/**
+ * Componente modal reutilizable que se muestra cuando la propiedad `isOpen` es verdadera.
+ * El modal se cierra cuando el usuario hace clic fuera de la caja de contenido, emitiendo un evento `close`.
+ */
 export default {
     name: "Modal",
     props: {
@@ -16,6 +20,9 @@ export default {
         }
     },
     methods: {
+        /**
+         * Cierra el modal emitiendo el evento `close` al componente padre.
+         */
         closeModal() {
             this.$emit('close');
         }

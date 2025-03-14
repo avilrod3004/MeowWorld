@@ -20,6 +20,9 @@
 </template>
 
 <script>
+/**
+ * Lista los post publicados por un usuario
+ */
 export default {
     name: "ListProfilePosts",
 
@@ -31,6 +34,10 @@ export default {
     },
 
     methods: {
+        /**
+         * Abre un post al hacer clic en él.
+         * Redirige al usuario a la página del post seleccionado utilizando el ID del post.
+         */
         openPost(id) {
             this.$router.push({ name: 'InfoPost', params: { id: id } })
         }

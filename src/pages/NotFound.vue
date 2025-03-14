@@ -12,10 +12,18 @@
 </template>
 
 <script>
+/**
+ * Componente que muestra una página de error 404 cuando la ruta solicitada no se encuentra.
+ *
+ * Presenta un mensaje con el código de error y un botón para volver a la página anterior.
+ */
 export default {
     name: "NotFound",
 
     methods: {
+        /**
+         * Metodo que navega hacia la página anterior en el historial de rutas.
+         */
         goBack() {
             this.$router.go(-1);
         }

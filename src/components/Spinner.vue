@@ -6,6 +6,11 @@
 </template>
 
 <script>
+/**
+ * Componente que muestra un spinner de carga con un texto indicando que se está cargando.
+ *
+ * Es utilizado para indicar que una operación está en proceso y el contenido está en espera.
+ */
 export default {
     name: 'Spinner'
 }

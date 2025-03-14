@@ -39,6 +39,10 @@ import Spinner from "../components/Spinner.vue";
 import ErrorsList from "../components/ErrorsList.vue";
 import ListProfiles from "../components/ListProfiles.vue";
 
+/**
+ * Componente que permite realizar una búsqueda filtrada por categoría (usuarios, gatos).
+ * Muestra un formulario para realizar la búsqueda y una lista de resultados basada en la categoría seleccionada.
+ */
 export default {
     name: "Search",
 
@@ -67,6 +71,11 @@ export default {
     },
 
     methods: {
+        /**
+         * Realiza la búsqueda según los valores introducidos en el formulario.
+         * Filtra los resultados basados en la categoría seleccionada (usuarios, gatos),
+         * y actualiza los resultados y la cantidad de coincidencias.
+         */
         async searchQuery(values) {
             this.loading = true;
             this.errors = [];
@@ -97,8 +106,6 @@ export default {
                         this.resultsCount = response.data.meta.total;
                         this.type = "cats"
                     }
-                } else if (category === "posts") {
-                    response = await api.get(`/posts?search=${query}`);
                 }
                 this.loading = false;
             } catch (error) {

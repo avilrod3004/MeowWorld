@@ -71,6 +71,11 @@ import api from "../helpers/api.js";
 import ErrorsList from "../components/ErrorsList.vue";
 import Spinner from "../components/Spinner.vue";
 
+/**
+ * Componente para crear un nuevo post con una imagen y una descripción.
+ *
+ * Permite seleccionar una imagen, añadir una descripción y asociar gatos al post.
+ */
 export default {
     name: "NewPost",
 
@@ -104,6 +109,9 @@ export default {
     },
 
     methods: {
+        /**
+         * Obtiene la lista de gatos del usuario desde el servidor.
+         */
         async getUserCats() {
             try {
                 const responseCats = await api.get(`cats/user/2`)
@@ -113,6 +121,10 @@ export default {
             }
         },
 
+        /**
+         * Maneja el cambio de imagen y muestra una vista previa.
+         * También valida el tipo de imagen seleccionado.
+         */
         handleImageChange(event) {
             const file = event.target.files[0];
             if (file) {
@@ -129,6 +141,10 @@ export default {
             }
         },
 
+        /**
+         * Maneja el cambio en los checkboxes para seleccionar los gatos asociados al post.
+         * Actualiza el valor del campo de gatos en el formulario.
+         */
         handleCheckboxChange(event, catId, setFieldValue, values) {
             const checked = event.target.checked;
 
@@ -147,7 +163,11 @@ export default {
             console.log("Gatos seleccionados:", updatedCats);
         },
 
-
+        /**
+         * Envía el formulario con la imagen seleccionada y la descripción.
+         * Si hay gatos seleccionados, los asocia al post.
+         * Muestra errores del servidor si ocurren.
+         */
         async submitPost(values) {
             if (!this.selectedImage) {
                 this.imageError = "Añade la imagen del post.";

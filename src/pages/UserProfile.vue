@@ -40,7 +40,12 @@ import Spinner from "../components/Spinner.vue";
 import ErrorsList from "../components/ErrorsList.vue";
 import defaultImg from '../assets/default_img_profile.png';
 
-
+/**
+ * Componente que muestra el perfil del usuario autenticado.
+ *
+ * Muestra la información del usuario, incluyendo su descripción, nombre, seguidores, seguidos, y gatos registrados.
+ * Permite editar el perfil o registrar un gato nuevo.
+ */
 export default {
     name: 'Profile',
     components: {ErrorsList, Spinner, ListCatsProfile, ListProfilePosts, ProfileData},
@@ -59,6 +64,10 @@ export default {
     },
 
     methods: {
+        /**
+         * Obtiene los datos del perfil del usuario autenticado, incluidos los gatos, seguidores, seguidos y publicaciones.
+         * Actualiza el estado del componente con los datos obtenidos.
+         */
         async getUserData() {
             try {
                 // Datos del perfil del usuario
@@ -86,10 +95,16 @@ export default {
             }
         },
 
+        /**
+         * Redirige al usuario a la página de edición del perfil.
+         */
         editUserProfile() {
             this.$router.push(`/profile/edit`);
         },
 
+        /**
+         * Redirige al usuario a la página para registrar un nuevo gato.
+         */
         goToCreateCat() {
             this.$router.push(`/cat/new`);
         },

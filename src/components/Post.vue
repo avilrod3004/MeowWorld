@@ -52,7 +52,7 @@
             </router-link>
         </li>
 
-        <li v-if="allInfo" @click="openModalEditPost" class="link">Editar</li>
+        <li v-if="allInfo && (this.authUserId === this.post.author.id)" @click="openModalEditPost" class="link">Editar</li>
         <Modal :is-open="showModalEditPost" v-slot="{ values }">
             <Form @submit="editPost" :validation-schema="schema" class="modal__formulario">
                 <label for="description" class="formulario__label-input">Cambiar la descripción del post:</label>
@@ -71,7 +71,7 @@
             </Form>
         </Modal>
 
-        <li v-if="allInfo" @click="showModalDeletePost = true" class="link">Borrar</li>
+        <li v-if="allInfo && (this.authUserId === this.post.author.id)" @click="showModalDeletePost = true" class="link">Borrar</li>
         <Modal :is-open="showModalDeletePost">
             <p class="pregunta">¿Quiere eliminar este post?</p>
             <div class="modal__buttons">
@@ -94,9 +94,15 @@ import api from "../helpers/api.js";
 import Modal from "../modals/Modal.vue";
 import * as yup from 'yup';
 import {Form, Field, ErrorMessage} from "vee-validate";
+import {useUserStore} from "../stores/userStore.js";
 
 library.add(faHeart, fasHeart, faComment);
 
+/**
+ * Componente que muestra una vista previa de un post, incluyendo información del autor,
+ * la imagen del post, la descripción, las interacciones (me gusta, comentarios) y las
+ * opciones de editar o eliminar el post.
+ */
 export default {
     name: "PostPreview",
     components: {
@@ -125,6 +131,7 @@ export default {
                     .max(2000, "La descripción debe tener una longitud máxima de 2000 caracteres"),
             }),
             errorsServer: null,
+            authUserId: null,
         }
     },
 
@@ -140,8 +147,14 @@ export default {
     },
 
     methods: {
+        /**
+         * Formatea la fecha del post.
+         */
         formatData,
 
+        /**
+         * Verifica si el post ha sido marcado como "me gusta" por el usuario actual.
+         */
         async isLiked() {
             try {
                 const reponseLike = await api.get(`likes/isLiked/${this.post.id}`);
@@ -156,6 +169,9 @@ export default {
             }
         },
 
+        /**
+         * Obtiene el número de "me gusta" del post.
+         */
         async getNumLikes() {
             try {
                 const reponseNumLike = await api.get(`likes/post/${this.post.id}`);
@@ -169,6 +185,9 @@ export default {
             }
         },
 
+        /**
+         * Guarda o elimina un "me gusta" en el post, según el estado actual.
+         */
         async saveLike() {
             this.liked = !this.liked;
 
@@ -197,6 +216,9 @@ export default {
             }
         },
 
+        /**
+         * Obtiene el número de comentarios en el post.
+         */
         async getNumComments() {
             try {
                 const responseComments = await api.get(`/comments/post/${this.post.id}`);
@@ -210,6 +232,9 @@ export default {
             }
         },
 
+        /**
+         * Elimina el post actual.
+         */
         async deletePost() {
             try {
                 const reponseDeletePost = await api.delete(`/posts/${this.post.id}`);
@@ -223,6 +248,9 @@ export default {
             }
         },
 
+        /**
+         * Obtiene la lista de gatos asociados al post (si los hay).
+         */
         async getCatsPost() {
             try {
                 const responseGetCats = await api.get(`catpost/post/${this.post.id}`)
@@ -236,11 +264,17 @@ export default {
             }
         },
 
+        /**
+         * Abre el modal de edición de la descripción del post.
+         */
         openModalEditPost() {
             this.currentDescription = this.post.description;
             this.showModalEditPost = true
         },
 
+        /**
+         * Edita el post con los nuevos valores proporcionados.
+         */
         async editPost(values) {
             try {
                 const responseEditPost = await api.put(`/posts/${this.post.id}`,
@@ -265,6 +299,7 @@ export default {
         this.getNumLikes();
         this.getNumComments();
         this.getCatsPost();
+        this.authUserId = useUserStore().getUser.id;
     }
 }
 </script>

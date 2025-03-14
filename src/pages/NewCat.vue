@@ -69,6 +69,12 @@ import defaultImg from "../assets/default_cat_img_profile.png";
 import api from "../helpers/api.js";
 import {ErrorMessage, Field, Form} from "vee-validate";
 
+/**
+ * Componente para registrar un nuevo gato en la base de datos.
+ *
+ * Permite subir una imagen, proporcionar un nombre y descripción para el gato,
+ * y definir si está en adopción.
+ */
 export default {
     name: "NewCat",
     components: {Form, Field, ErrorMessage},
@@ -97,6 +103,9 @@ export default {
     },
 
     methods: {
+        /**
+         * Maneja el cambio de imagen y muestra una vista previa.
+         */
         handleImageChange(event) {
             const file = event.target.files[0];
             if (file) {
@@ -110,6 +119,11 @@ export default {
             }
         },
 
+        /**
+         * Registra un nuevo gato enviando los datos al servidor.
+         * Si la respuesta es exitosa, redirige a la página del gato.
+         * Si ocurre un error, muestra los errores del servidor.
+         */
         async registerCat(values) {
             try {
                 const formData = new FormData();
@@ -150,6 +164,9 @@ export default {
             }
         },
 
+        /**
+         * Redirige al usuario a la página de perfil.
+         */
         goBack() {
             this.$router.push(`/profile`);
         }

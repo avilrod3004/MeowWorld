@@ -28,6 +28,7 @@
 
 <script>
 import defaultImg from '../assets/default_img_profile.png';
+import {useUserStore} from "../stores/userStore.js";
 
 export default {
     name: "ListProfiles",
@@ -54,7 +55,11 @@ export default {
         },
 
         gotToUserProfile(userId) {
-            this.$router.push({ name: 'OtherUserProfile', params: { id: userId } });
+            if (useUserStore().getUser.id === userId) {
+                this.$router.push("/profile");
+            } else {
+                this.$router.push({ name: 'OtherUserProfile', params: { id: userId } });
+            }
         }
     }
 }

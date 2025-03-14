@@ -45,6 +45,12 @@ import { Form, Field, ErrorMessage } from "vee-validate";
 import Spinner from "../components/Spinner.vue";
 import ErrorsList from "../components/ErrorsList.vue";
 
+/**
+ * Componente InfoPost
+ *
+ * Muestra la información de un post junto con sus comentarios.
+ * Permite publicar nuevos comentarios y maneja la validación del formulario.
+ */
 export default {
     name: "InfoPost",
     components: {ErrorsList, Spinner, ErrorMessage, Field, Post, Comment, Form},
@@ -68,6 +74,10 @@ export default {
     },
 
     methods: {
+        /**
+         * Obtiene los datos del post y sus comentarios desde la API.
+         * Maneja los errores en caso de fallo.
+         */
         async getPostData() {
             try {
                 const responsePost = await api.get(`/posts/${this.$route.params.id}`);
@@ -86,6 +96,9 @@ export default {
             }
         },
 
+        /**
+         * Envía un nuevo comentario a la API y recarga los datos del post.
+         */
         async submitComment(values, { resetForm }) {
             try {
                 this.loadingComment = true;
