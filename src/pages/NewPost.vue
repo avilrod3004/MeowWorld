@@ -53,7 +53,7 @@
                         />
                         <label :for="'opcion' + index">{{ cat.name }}</label>
                     </div>
-                    <p>No has registrado ningún gato todavía.</p>
+                    <p v-if="!cats">No has registrado ningún gato todavía.</p>
                 </Field>
             </div>
 
