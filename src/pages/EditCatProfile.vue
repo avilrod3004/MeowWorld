@@ -196,9 +196,5 @@ export default {
 </script>
 
 <style scoped>
-.formulario__input-adopcion {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
+
 </style>

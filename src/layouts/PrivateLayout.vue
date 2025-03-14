@@ -22,16 +22,18 @@ export default {
 </script>
 
 <style scoped>
+
 .private-layout {
     display: flex;
     flex-direction: column;
     height: 100vh;
-
-    background-color: var(--background-color);
 }
 
 main {
     flex: 1;
     padding: 1rem;
+
+    background-color: var(--background-color);
+    color: var(--text-color);
 }
 </style>

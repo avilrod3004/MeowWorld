@@ -33,6 +33,12 @@
     gap: 0.25rem;
 }
 
+.formulario__input-adopcion {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
 .content__form {
     background-color: var(--background-color);
     border-radius: 1rem;

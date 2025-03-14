@@ -65,7 +65,7 @@
 
 <script>
 import * as yup from "yup";
-import defaultImg from "../assets/default_img_profile.png";
+import defaultImg from "../assets/default_cat_img_profile.png";
 import api from "../helpers/api.js";
 import {ErrorMessage, Field, Form} from "vee-validate";
 
