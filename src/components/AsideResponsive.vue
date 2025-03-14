@@ -4,37 +4,37 @@
             <li class="listado__opcion">
                 <router-link to="/home" class="opcion__enlace">
                     <font-awesome-icon icon="house" class="icono"/>
-                    <span>Inicio</span>
+                    <span class="icono">Inicio</span>
                 </router-link>
             </li>
             <li class="listado__opcion">
                 <router-link to="/search" class="opcion__enlace">
                     <font-awesome-icon icon="magnifying-glass" class="icono"/>
-                    <span>Búsqueda</span>
+                    <span class="icono">Búsqueda</span>
                 </router-link>
             </li>
             <li class="listado__opcion">
                 <router-link to="/newpost" class="opcion__enlace">
                     <font-awesome-icon icon="plus" class="icono"/>
-                    <span>Nuevo post</span>
+                    <span class="icono">Nuevo post</span>
                 </router-link>
             </li>
             <li class="listado__opcion">
                 <router-link to="/chats" class="opcion__enlace">
                     <font-awesome-icon icon="message" class="icono"/>
-                    <span>Chats</span>
+                    <span class="icono">Chats</span>
                 </router-link>
             </li>
             <li class="listado__opcion">
                 <router-link to="/notifications" class="opcion__enlace">
                     <font-awesome-icon icon="bell" class="icono"/>
-                    <span>Notificaciones</span>
+                    <span class="icono">Notificaciones</span>
                 </router-link>
             </li>
             <li class="listado__opcion">
                 <router-link to="/profile" class="opcion__enlace">
                     <font-awesome-icon icon="user" class="icono"/>
-                    <span>Mi perfil</span>
+                    <span class="icono">Mi perfil</span>
                 </router-link>
             </li>
         </ul>
