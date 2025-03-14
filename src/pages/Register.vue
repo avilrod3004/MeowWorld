@@ -52,6 +52,14 @@ import {useUserStore} from "../stores/userStore.js";
 import {mapState} from "pinia";
 import ErrorsList from "../components/ErrorsList.vue";
 
+/**
+ * Componente de página de registro.
+ *
+ * Permite a los usuarios crear una cuenta mediante un formulario de registro.
+ * Valida los campos utilizando VeeValidate y muestra errores devueltos por el servidor.
+ * @component
+ * @example
+ */
 export default {
     components: {
         ErrorsList,
@@ -102,6 +110,13 @@ export default {
     },
 
     methods: {
+        /**
+         * Maneja el envío del formulario de registro.
+         * Envía los datos al backend y gestiona los errores de validación o servidor.
+         *
+         * @async
+         * @param {Object} values - Datos del formulario.
+         */
         async handleRegister(values) {
             try {
                 const response = await axios.post( import.meta.env.VITE_BASE_API + "auth/register", values);

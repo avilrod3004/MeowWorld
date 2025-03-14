@@ -73,6 +73,12 @@ import defaultImg from '../assets/default_img_profile.png';
 import ErrorsList from "../components/ErrorsList.vue";
 import Spinner from "../components/Spinner.vue";
 
+/**
+ * Componente EditCatProfile
+ *
+ * Permite editar el perfil de un gato, incluyendo su nombre, descripción, imagen y estado de adopción.
+ * Valida los datos del formulario y actualiza el perfil a través de la API.
+ */
 export default {
     name: "EditCatProfile",
 
@@ -109,6 +115,9 @@ export default {
     },
 
     methods: {
+        /**
+         * Obtiene los datos actuales del perfil del gato.
+         */
         async getCatData() {
             try {
                 const responseCatProfile = await api.get(`cats/${this.catId}`);
@@ -118,6 +127,9 @@ export default {
             }
         },
 
+        /**
+         * Maneja el cambio de imagen del perfil.
+         */
         handleImageChange(event) {
             const file = event.target.files[0];
             if (file) {
@@ -131,6 +143,9 @@ export default {
             }
         },
 
+        /**
+         * Actualiza el perfil del gato con los datos del formulario.
+         */
         async updateCatProfile(values) {
             try {
                 this.loadingChanges = true;
@@ -181,6 +196,9 @@ export default {
             }
         },
 
+        /**
+         * Redirige a la página anterior sin aplicar cambios.
+         */
         goBack() {
             this.$router.push(`/cat/${this.catId}`);
         }

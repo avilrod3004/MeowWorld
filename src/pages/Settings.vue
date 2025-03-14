@@ -104,6 +104,13 @@ import {Form, Field, ErrorMessage} from "vee-validate";
 
 library.add(faCircleHalfStroke, faPowerOff, faKey, faEnvelope, faCat, faTriangleExclamation, faCode, faInfoCircle);
 
+
+/**
+ * Componente de configuración del usuario.
+ *
+ * Permite gestionar ajustes de la cuenta, como cambiar el email, actualizar la contraseña, cerrar sesión, cambiar el tema y más.
+ * Incluye validaciones con VeeValidate y muestra modales para las acciones sensibles.
+ */
 export default {
     name: "Configuration",
 
@@ -152,6 +159,9 @@ export default {
     },
 
     methods: {
+        /**
+         * Cambia el tema de la aplicación entre claro y oscuro.
+         */
         changeTheme() {
             const body = document.body;
             const currentTheme = body.getAttribute("data-theme");
@@ -159,6 +169,9 @@ export default {
             body.setAttribute("data-theme", newTheme);
         },
 
+        /**
+         * Actualiza el email del usuario con validación previa.
+         */
         async updateEmail(values) {
             try {
                 const responseUpdate = await api.post(`users/${useUserStore().getUser.id}/credentials`,
@@ -176,6 +189,9 @@ export default {
             }
         },
 
+        /**
+         * Actualiza la contraseña del usuario con validación previa.
+         */
         async updatePassword(values) {
             try {
                 const responseUpdate = await api.post(`users/${useUserStore().getUser.id}/credentials`,
@@ -196,6 +212,9 @@ export default {
             }
         },
 
+        /**
+         * Cierra la sesión del usuario, limpia el token y redirige a la página de inicio.
+         */
         async logout() {
             try {
                 const response = await api.get('auth/logout');

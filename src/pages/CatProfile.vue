@@ -50,6 +50,13 @@ import ErrorsList from "../components/ErrorsList.vue";
 
 library.add(faPaw);
 
+/**
+ * Componente CatProfile
+ *
+ * Muestra el perfil de un gato con información relevante, publicaciones, opciones de edición y eliminación del perfil.
+ * Permite gestionar la adopción y visualizar las publicaciones del gato.
+ * */
+
 export default {
     name: "CatProfile",
     components: {ErrorsList, Spinner, ListProfilePosts, ProfileData, FontAwesomeIcon, Modal },
@@ -69,6 +76,9 @@ export default {
     },
 
     methods: {
+        /**
+         * Obtiene los datos del perfil del gato y sus publicaciones.
+         */
         async getCatData() {
             try {
                 this.errorsServer = null;
@@ -84,10 +94,16 @@ export default {
             }
         },
 
+        /**
+         * Redirige a la página de edición del perfil del gato.
+         */
         updateCatProfile() {
             this.$router.push({ name: 'EditCatProfile', params: { id: this.catId } });
         },
 
+        /**
+         * Elimina el perfil del gato mediante una petición a la API.
+         */
         async deleteCatProfile() {
             try {
                 this.loading = true;

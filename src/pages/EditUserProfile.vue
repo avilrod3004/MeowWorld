@@ -64,7 +64,12 @@ import defaultImg from '../assets/default_img_profile.png';
 import Spinner from "../components/Spinner.vue";
 import ErrorsList from "../components/ErrorsList.vue";
 
-
+/**
+ * Componente EditUserProfile
+ *
+ * Permite editar el perfil del usuario, incluyendo nombre, nombre de usuario, descripción e imagen de perfil.
+ * Valida los campos con VeeValidate y actualiza los datos a través de una petición a la API.
+ */
 export default {
     name: "EditUserProfile",
 
@@ -102,6 +107,9 @@ export default {
     },
 
     methods: {
+        /**
+         * Obtiene los datos del perfil del usuario.
+         */
         async getUserData() {
             try {
                 const responseProfile = await api.get('auth/me');
@@ -111,6 +119,9 @@ export default {
             }
         },
 
+        /**
+         * Maneja el cambio de la imagen de perfil.
+         */
         handleImageChange(event) {
             const file = event.target.files[0];
             if (file) {
@@ -124,6 +135,10 @@ export default {
             }
         },
 
+        /**
+         * Actualiza los datos del perfil del usuario.
+         * Realiza la petición a la API para actualizar el perfil y redirige a la página de perfil si es exitoso
+         */
         async updateUserProfile(values) {
             try {
                 this.loadingChanges = true;
@@ -174,6 +189,9 @@ export default {
             }
         },
 
+        /**
+         * Redirige a la página de perfil sin guardar cambios.
+         */
         goBack() {
             this.$router.push("/profile");
         }

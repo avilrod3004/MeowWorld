@@ -1,3 +1,4 @@
+
 <template>
 <main class="login">
     <aside class="login__aside">
@@ -39,6 +40,16 @@ import {useUserStore} from "../stores/userStore.js";
 import {mapState} from "pinia";
 import ErrorsList from "../components/ErrorsList.vue";
 
+/**
+ * Componente de inicio de sesión de usuario.
+ *
+ * Este componente permite a los usuarios iniciar sesión en su cuenta mediante un formulario de registro que incluye validación
+ * en el frontend. Además, gestiona los errores del servidor y muestra los mensajes de error al usuario.
+ *
+ * @component
+ * @example
+ * <Login />
+ */
 export default {
     components: {
         ErrorsList,
@@ -66,10 +77,24 @@ export default {
     },
 
     computed: {
+        /**
+         * Estado del usuario obtenido del store.
+         * @returns {Object|null} Datos del usuario o null si no hay sesión iniciada.
+         */
         ...mapState(useUserStore, ["user"]),
     },
 
     methods: {
+        /**
+         * Maneja el envío del formulario de inicio de sesión.
+         *
+         * Envía los datos a la API para autenticar al usuario. Si es exitoso, guarda el token y redirige a la página de inicio.
+         * En caso de error, captura los mensajes de validación o errores del servidor.
+         *
+         * @async
+         * @function handleLogin
+         * @param {Object} values - Datos del formulario con email y contraseña.
+         */
         async handleLogin(values) {
             try {
                 const response = await axios.post( import.meta.env.VITE_BASE_API + "auth/login", values);
